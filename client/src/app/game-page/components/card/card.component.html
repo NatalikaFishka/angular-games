@@ -1,0 +1,11 @@
+<div 
+    *ngIf="!isGameOver"
+    class="card" 
+    (click)='flipCard()' 
+    [@animateCardFlip]='state'
+    [@cardFlyInOut]='{value: undefined, params: {offsetLeft: offsetLeft, offsetTop: offsetTop, angleRight: angleRight, angleLeft: angleLeft}}' 
+    (@cardFlyInOut.done)='gameOverAnimationDone()'
+    [style]="{'width': cardSide, 'height': cardSide}"
+    >
+    <img [src]='cardData.image' alt="card image" >
+</div>

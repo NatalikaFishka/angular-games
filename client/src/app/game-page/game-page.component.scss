@@ -1,0 +1,17 @@
+.main {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    // height: 100%;
+    overflow: hidden;
+    
+    &.wide {
+        grid-template-columns: 3fr 1fr; 
+        grid-template-rows: 100%;
+    }
+
+    &.narrow {
+        grid-template-columns: 100%; 
+        grid-template-rows: 3fr 1fr;
+    }
+}

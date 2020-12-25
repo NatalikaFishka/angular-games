@@ -1,0 +1,13 @@
+<mat-card class="game-card" *ngFor='let gameCard of gamesConfig'>
+    <mat-card-header>
+      <mat-card-title>{{gameCard.name}}</mat-card-title>
+    </mat-card-header>    
+        <img mat-card-image [src]="gameCard.image" [alt]="gameCard.name">
+    <mat-card-actions>
+        <button  
+        mat-raised-button 
+        color='primary'
+        [routerLink]='[gameCard.path]'
+    >Play</button>
+    </mat-card-actions>
+  </mat-card>

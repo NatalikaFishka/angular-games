@@ -1,0 +1,29 @@
+<div class="content">
+  <div class="timer">{{gameResultService.gameTimer$ | async | secondsConverter}}</div>
+
+  <form [formGroup]='form' (submit)="formSubmit()">
+    <mat-form-field appearance='outline'>
+        <mat-label>Cards in game</mat-label>
+        <mat-select formControlName='cardsInGame'>
+          <mat-option *ngFor="let number of cardsInPlay | numberToArray" [value]="number">
+            {{number}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field appearance='outline'>
+        <mat-label>Matches per card</mat-label>
+        <mat-select formControlName='matchesPerCard'>
+          <mat-option *ngFor="let number of maxmatchesPerCard | numberToArray:minmatchesPerCard" [value]="number">
+            {{number}}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+  
+    <button 
+        type="submit"        
+        mat-raised-button 
+        color='primary'
+        >Start game</button>
+  </form>
+</div>

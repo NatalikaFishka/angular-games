@@ -1,0 +1,17 @@
+:host {
+    display: block;
+    perspective: 600px;
+}
+
+.card {
+    border: 2px solid #ccc;
+    box-sizing: border-box;
+    box-shadow: 10px 10px 43px -18px rgba(0, 0, 0, 0.75);
+    transform-style: preserve-3d;
+    margin: 0.5vw;
+
+    img {
+        width: 100%;
+        backface-visibility: hidden;
+    }
+}

@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button [matMenuTriggerFor]="globalNav">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Games App</span>
+    <span class="spacer"></span>
+    <button *ngIf="!(authService.authenticatedUserEmail$ | async); else authenticatedUser"  mat-flat-button color="primary" (click)="openDialog()">
+      <mat-icon>person</mat-icon>
+      <span> Login</span>
+    </button>
+</mat-toolbar>
+
+<ng-template #authenticatedUser>
+  <button mat-flat-button color="primary" [matMenuTriggerFor]="logout">
+    <mat-icon>person</mat-icon>
+    <span> {{authService.authenticatedUserEmail$ | async}}</span>
+  </button>
+</ng-template>
+
+<mat-menu #globalNav="matMenu">
+  <button mat-menu-item [routerLink]='["/"]'>
+    <mat-icon>home</mat-icon>
+    <span>Home page</span>
+  </button>
+</mat-menu>
+
+<mat-menu #logout="matMenu">
+  <button mat-menu-item (click)="authService.logout()">
+    <mat-icon>login</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>

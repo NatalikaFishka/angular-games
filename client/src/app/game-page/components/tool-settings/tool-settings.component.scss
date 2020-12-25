@@ -1,0 +1,15 @@
+.content {
+    display: grid;
+    justify-items: center;
+
+    form {
+        display: grid;
+        padding: 1rem;
+    }
+
+    .timer {
+        font-size: 2rem;
+        padding: 1rem;
+        line-height: 2.5rem;
+    }
+}

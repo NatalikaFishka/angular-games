@@ -8,7 +8,7 @@ import { GameResultService } from './game-result.service';
 @Injectable({
   providedIn: 'root'
 })
-export class CardCreaterService {
+export class CardCreatorService {
 
   private cardFactory: ComponentFactory<CardComponent>;
   private cardComponent!: ComponentRef<CardComponent>;

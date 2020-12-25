@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, OnInit} from '@angular/core';
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ComponentRefDirective } from '../../../shared/directives/reference.directive';
-import { CardCreaterService } from '../../services/card-creater.service';
+import { CardCreatorService } from '../../services/card-creater.service';
 
 @Component({
   selector: 'app-board',
@@ -15,7 +15,7 @@ export class BoardComponent implements OnInit, AfterViewInit {
   
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private cardCreatorService: CardCreaterService
+    private cardCreatorService: CardCreatorService
   ) {}
 
   ngOnInit(): void {

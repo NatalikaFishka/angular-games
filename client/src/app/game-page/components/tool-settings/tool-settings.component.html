@@ -14,7 +14,7 @@
     <mat-form-field appearance='outline'>
         <mat-label>Matches per card</mat-label>
         <mat-select formControlName='matchesPerCard'>
-          <mat-option *ngFor="let number of maxmatchesPerCard | numberToArray:minmatchesPerCard" [value]="number">
+          <mat-option *ngFor="let number of maxMatchesPerCard | numberToArray:minMatchesPerCard" [value]="number">
             {{number}}
           </mat-option>
         </mat-select>

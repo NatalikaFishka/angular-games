@@ -1,4 +1,7 @@
 import { Component, OnInit} from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { GameResultService } from './services/game-result.service';
 
 @Component({
   selector: 'app-game-page',
@@ -17,6 +20,6 @@ export class GamePageComponent implements OnInit{
       this.isScreenWide = true;
     } else {
       this.isScreenWide = false;    
-    }
+    }     
   }
 }

@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppStore } from '../app-store.model';
 import { AuthDialogComponent } from './auth-dialog/auth-dialog.component';
 import { AuthService } from './services/auth.service';
 
@@ -8,16 +11,17 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app-shell.component.html',
   styleUrls: ['./app-shell.component.scss']
 })
-export class AppShellComponent implements OnInit {
+export class AppShellComponent {
+
+  public authenticatedUserEmail$: Observable<string | undefined>;
 
   constructor(
     private dialog: MatDialog, 
-    public authService: AuthService
-  ) {}
-
-  ngOnInit(): void {
-    this.authService.setUserFromLocalStorage();
-  }  
+    public authService: AuthService,
+    private store: Store<AppStore>
+  ) {
+    this.authenticatedUserEmail$ = this.store.select(state => state.authUser.email);
+  }
 
   openDialog(): void {
     this.dialog.open(AuthDialogComponent);

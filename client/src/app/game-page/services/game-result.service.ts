@@ -1,17 +1,19 @@
 import { ComponentRef, Injectable } from '@angular/core';
 import { allMatch } from '../utils';
 import { GAME_SETTINGS } from '../config'
-import { GameSettings, GameState, SaveResult } from '../models';
+import { GameSettings, GameState, MemoryGameResult, SaveResult } from '../models';
 import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
-import {map, take} from 'rxjs/operators';
+import {filter, map, switchMap, take, takeLast, takeUntil, tap} from 'rxjs/operators';
 import { CardComponent } from '../components/card/card.component';
 import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngrx/store';
+import {getGameResults, saveGameResult, updateGameResult, updateGameResultFailure} from '../store/actions/game-result.actions'
+import { AppStore } from 'src/app/app-store.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameResultService {
-  private USER_DATA: string = 'userData';
 
   private matchesPerCard: number = GAME_SETTINGS.matchesPerCard;
   private cardsInGame: number = GAME_SETTINGS.cardsInGame;
@@ -23,11 +25,18 @@ export class GameResultService {
   private gameState: GameState = GameState.notStarted;
   public gameTimer$: BehaviorSubject<number> = new BehaviorSubject<number>(0)
   private counter$: Observable<number> = interval(1000).pipe(map((v:number) => v+1));
-  private counterSubscription!: Subscription;
+  private counterSubscription!: Subscription;  
+
+  private isLoggedIn$: Observable<boolean>;
+  private bestPreviousResults$: Observable<Array<MemoryGameResult>>
 
   constructor(
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private store: Store<AppStore>
+  ) {
+    this.isLoggedIn$ = this.store.select(state => state.authUser.isAuthenticated);
+    this.bestPreviousResults$ = this.store.select(state => state.memoryGameResults.bestPreviousResults)
+  }
 
   public openCard(cardComponent: CardComponent) {
 
@@ -56,10 +65,10 @@ export class GameResultService {
   }
 
   public checkForMatch() {
-    const areMached = allMatch(this.openedCards);
+    const areMatched = allMatch(this.openedCards);
 
       for(let cardComponent of this.openedCardsComponent) { 
-        if(areMached) {
+        if(areMatched) {
           cardComponent.setMatched();
           this.isGameFinished();        
         } else {
@@ -90,25 +99,36 @@ export class GameResultService {
 
     if(this.countMatchedCards === this.cardsInGame * this.matchesPerCard) {
 
-      this.gameState = GameState.finished;
-      
-      const userData = localStorage.getItem(this.USER_DATA);
+      this.gameState = GameState.finished;    
 
-      if(userData) {
-        const {token} = JSON.parse(userData);
+      this.isLoggedIn$.pipe(
+        filter((isLoggedIn) => !!isLoggedIn),
+        switchMap(() => this.bestPreviousResults$),
+        tap((results) => {
+          this.gameTimer$.pipe(take(1)).subscribe((time) => {
+            
+            const bestScore = results.find(result => (
+                result.cardsInGame === this.cardsInGame && 
+                result.matchesPerCard === this.matchesPerCard));
 
-        let payload: SaveResult;      
-        const finalSub: Subscription = this.gameTimer$.pipe(take(1)).subscribe((time) => {
-          payload = {
-            score: time,
-            cardsInGame: this.cardsInGame,
-            MatchesPerCard: this.matchesPerCard
-          }
-          this.saveResult(token, payload).subscribe();
-        });
-        finalSub.unsubscribe();
-
-      }
+            if(!bestScore) {
+              this.store.dispatch(saveGameResult({payload: {
+                score: time,
+                cardsInGame: this.cardsInGame,
+                matchesPerCard: this.matchesPerCard
+              }}))
+            } else if (bestScore && bestScore.score > time) {
+              this.store.dispatch(updateGameResult({ payload: {
+                id: bestScore.id,
+                score: time,
+                cardsInGame: this.cardsInGame,
+                matchesPerCard: this.matchesPerCard
+              }}));               
+            }
+          });
+        }),
+        take(1)
+      ).subscribe();      
 
       this.counterSubscription.unsubscribe();
     
@@ -120,19 +140,19 @@ export class GameResultService {
     }
   }
 
-  public getUserResults(token: string): Observable<any> {
-    return this.http.get<any>('/api/memoryGameResults', {
-      headers: {
-        "authorization": token
-      }
-    })
+  public dispatchGetResultsAction(): void {
+    this.store.dispatch(getGameResults());
   }
 
-  private saveResult(token: string, payload: SaveResult): Observable<any> {
-    return this.http.post<any>('/api/memoryGameResults/save', payload, {
-      headers: {
-        "authorization": token
-      }
-    })
+  public getUserResults(): Observable<any> {
+    return this.http.get<any>('/api/memoryGameResults')
+  }
+
+  public saveResult(payload: SaveResult): Observable<any> {
+    return this.http.post<any>('/api/memoryGameResults/save', payload)
+  }
+
+  public updateResult(payload: any): Observable<any> {
+    return this.http.post<any>(`/api/memoryGameResults/update`, payload)
   }
 }

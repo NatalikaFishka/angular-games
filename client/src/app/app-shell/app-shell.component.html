@@ -4,7 +4,7 @@
     </button>
     <span>Games App</span>
     <span class="spacer"></span>
-    <button *ngIf="!(authService.authenticatedUserEmail$ | async); else authenticatedUser"  mat-flat-button color="primary" (click)="openDialog()">
+    <button *ngIf="!(authenticatedUserEmail$ | async); else authenticatedUser"  mat-flat-button color="primary" (click)="openDialog()">
       <mat-icon>person</mat-icon>
       <span> Login</span>
     </button>
@@ -13,7 +13,7 @@
 <ng-template #authenticatedUser>
   <button mat-flat-button color="primary" [matMenuTriggerFor]="logout">
     <mat-icon>person</mat-icon>
-    <span> {{authService.authenticatedUserEmail$ | async}}</span>
+    <span> {{authenticatedUserEmail$ | async}}</span>
   </button>
 </ng-template>
 

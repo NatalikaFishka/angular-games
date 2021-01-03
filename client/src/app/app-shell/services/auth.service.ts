@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
+import { AppStore } from 'src/app/app-store.model';
+import { clearGameResultsInStore } from 'src/app/game-page/store/actions/game-result.actions';
 import { AuthServerResponse, UserData } from '../models';
+import { logout } from '../store/actions/auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +16,8 @@ export class AuthService {
   public authenticatedUserEmail$: ReplaySubject<string | undefined> = new ReplaySubject(1);
   
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private store: Store<AppStore>
   ) { }
 
   createNewUser(userData: UserData): Observable<AuthServerResponse> {
@@ -23,42 +28,22 @@ export class AuthService {
     return this.http.post<AuthServerResponse>('/api/auth/login', userData);
   }
 
-  getAuthenticatedUser(token: string): Observable<AuthServerResponse> {
-    return this.http.get<AuthServerResponse>('/api/auth', {
-      headers: {
-        "authorization": token
-      }
-    })
+  getAuthenticatedUser(): Observable<AuthServerResponse> {
+    return this.http.get<AuthServerResponse>('/api/auth')
   }
 
   logout(): void {
-    this.authenticatedUserEmail$.next(undefined);
+    this.store.dispatch(logout());
+    this.store.dispatch(clearGameResultsInStore());
     this.clearLocalStorage();
   }
 
-  setAuthenticatedUser(resUserData: AuthServerResponse): void {
-    this.authenticatedUserEmail$.next(resUserData.email);
-    this.setUserDataToLocalStorage(resUserData);
-  }
-
   setUserDataToLocalStorage(resUserData: AuthServerResponse): void {
-    const {email, token, userId} = resUserData;
-    localStorage.setItem(this.USER_DATA, JSON.stringify({email, token, userId}));
+    const { token } = resUserData;
+    localStorage.setItem(this.USER_DATA, JSON.stringify({token}));
   }
 
   clearLocalStorage(): void {
     localStorage.removeItem(this.USER_DATA);
-  }
-
-  setUserFromLocalStorage(): void {
-      const userData = localStorage.getItem(this.USER_DATA);
-
-    if(userData) {
-      const {token} = JSON.parse(userData);
-      this.getAuthenticatedUser(token).subscribe(
-        (email) => this.authenticatedUserEmail$.next(email.email),
-        () => this.clearLocalStorage()
-      )
-    } 
   }
 }

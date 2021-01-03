@@ -22,11 +22,7 @@ export class CardConfigGeneratorService {
 
     this.generateFinalConfig();
   }
-
-  getMatchesPerCard(): number {
-    return this.matchesPerCard;
-  }
-
+  
   generateFinalConfig(): Dino[] {
 
     this.gameConfig = sortConfig([...DINO_CONFIG]);

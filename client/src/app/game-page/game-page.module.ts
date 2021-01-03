@@ -24,7 +24,7 @@ import { GamePageComponent } from './game-page.component';
         MatSelectModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
     ]
 })
 export class GamePageModule {}

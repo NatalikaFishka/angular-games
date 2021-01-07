@@ -11,10 +11,10 @@ app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/memoryGameResults', require('./routes/memoryGameResults.routes'))
 
 if(process.env.NODE_ENV === 'production') {
-    app.use('/', express.static(path.join(__dirname, 'client', 'docs')));
+    app.use('/', express.static(path.join(__dirname, 'dist')));
 
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'docs', 'index.html'))
+        res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
     })
 }
 

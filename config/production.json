@@ -1,0 +1,5 @@
+{
+    "port": 5000,
+    "jwtSecret": "some sected token",
+    "mongoUrl": "mongodb+srv://Natalya:12345@cluster0.tltag.mongodb.net/app?retryWrites=true&w=majority"
+}

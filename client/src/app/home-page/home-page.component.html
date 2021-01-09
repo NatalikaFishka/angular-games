@@ -1,8 +1,11 @@
-<mat-card class="game-card" *ngFor='let gameCard of gamesConfig'>
+<mat-card class="game-card" *ngFor='let gameCard of gamesConfig; let idx = index'>
     <mat-card-header>
       <mat-card-title>{{gameCard.name}}</mat-card-title>
-    </mat-card-header>    
-        <img mat-card-image [src]="gameCard.image" [alt]="gameCard.name">
+    </mat-card-header>   
+    <div class="card-image">
+        <img mat-card-image [src]="gameCard.image" [alt]="gameCard.name" (load)="gamesImageLoadingStates[idx] = true" >
+        <mat-spinner diameter="50" class="image-spinner" *ngIf="!gamesImageLoadingStates[idx]"></mat-spinner>
+    </div>
     <mat-card-actions>
         <button  
         mat-raised-button 

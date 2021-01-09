@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Game, GamesConfig } from './config';
 
 @Component({
@@ -6,13 +6,13 @@ import { Game, GamesConfig } from './config';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss']
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent {
 
-  public gamesConfig: Game[] = GamesConfig;
+  public gamesConfig: Game[] = [...GamesConfig];
+  public gamesImageLoadingStates: boolean[];
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor() { 
+    this.gamesImageLoadingStates = Array(this.gamesConfig.length).fill(false);
   }
 
 }

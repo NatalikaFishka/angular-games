@@ -12,9 +12,17 @@
         justify-content: center;
     }
 
-    img {
-      width: calc(20rem + 32px);
+    .card-image {
+      position: relative;
+      display: grid;
+      margin-top: 16px;
       height: calc(20rem + 32px);
+
+      .image-spinner {
+        position: absolute;
+        align-self: center;
+        justify-self: center;
+      }
     }
 
     mat-card-actions {

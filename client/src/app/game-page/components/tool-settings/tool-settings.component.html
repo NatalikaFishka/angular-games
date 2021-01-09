@@ -1,5 +1,7 @@
-<div class="content">
-  
+<mat-card class="content">
+  <mat-card-header>
+    <mat-card-title>Game Settings</mat-card-title>
+  </mat-card-header>  
   <form [formGroup]='form' (submit)="formSubmit()">
     <mat-form-field appearance='outline'>
         <mat-label>Cards in game</mat-label>
@@ -25,4 +27,4 @@
         color='primary'
         >Start game</button>
   </form>
-</div>
+</mat-card>

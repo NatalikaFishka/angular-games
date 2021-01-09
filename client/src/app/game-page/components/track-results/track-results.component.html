@@ -1,2 +1,30 @@
-<div class="timer"><small>Current score:</small> {{gameResultService.gameTimer$ | async | secondsConverter}}</div>
-<div class="timer" *ngIf="bestPreviousResult$ | async as bestResult"><small>Best score:</small> {{bestResult | secondsConverter}}</div>
+<mat-card class="time-set">
+    <mat-card-header>
+        <mat-card-title>Game Score</mat-card-title>
+    </mat-card-header>
+    <div class="time">
+        <mat-icon  
+            matTooltip="Current game score"
+            matTooltipPosition="left"
+        >
+            alarm
+        </mat-icon> 
+        <span>
+            {{gameResultService.gameTimer$ | async | secondsConverter}}
+        </span>
+    </div>
+    <div class="time" >
+        <mat-icon
+            matTooltip="Your best score"
+            matTooltipPosition="left"
+        >
+            emoji_events
+        </mat-icon>
+        <span *ngIf="bestPreviousResult$ | async as bestResult; else noresult" >
+            {{bestResult | secondsConverter}} 
+        </span>
+        <ng-template #noresult>
+            <span> - - : - - </span>
+        </ng-template>
+    </div>
+</mat-card>

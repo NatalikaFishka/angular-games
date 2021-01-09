@@ -10,6 +10,9 @@ import { ToolSettingsComponent } from './components/tool-settings/tool-settings.
 import { SharedModule } from '../shared/shared.module';
 import { GamePageComponent } from './game-page.component';
 import { TrackResultsComponent } from './components/track-results/track-results.component';
+import { MatIconModule } from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -27,6 +30,9 @@ import { TrackResultsComponent } from './components/track-results/track-results.
         FormsModule,
         ReactiveFormsModule,
         SharedModule,
+        MatIconModule,
+        MatCardModule,
+        MatTooltipModule
     ]
 })
 export class GamePageModule {}

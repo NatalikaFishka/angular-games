@@ -7,11 +7,28 @@
     
     &.wide {
         grid-template-columns: 3fr 1fr; 
-        grid-template-rows: 100%;
+        // grid-template-rows: 50% 50%;
+        grid-template-areas: "board track-results"
+                            "board tool-settings";
+
     }
 
     &.narrow {
         grid-template-columns: 100%; 
         grid-template-rows: 3fr 1fr;
+        grid-template-areas: "board" 
+                            "track-results"
+                            "tool-settings";
+    }
+
+    app-board {
+        grid-area: board;
+    }
+
+    app-track-results {
+        grid-area: track-results;
+    }
+    app-tool-settings {
+        grid-area: tool-settings;
     }
 }

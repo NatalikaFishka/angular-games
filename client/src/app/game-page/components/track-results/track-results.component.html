@@ -13,18 +13,27 @@
             {{gameResultService.gameTimer$ | async | secondsConverter}}
         </span>
     </div>
-    <div class="time" >
+    <div class="time" *ngIf="bestPreviousResult$ | async as bestResult; else noresult" >
         <mat-icon
             matTooltip="Your best score"
             matTooltipPosition="left"
         >
             emoji_events
         </mat-icon>
-        <span *ngIf="bestPreviousResult$ | async as bestResult; else noresult" >
+        <span >
             {{bestResult | secondsConverter}} 
         </span>
-        <ng-template #noresult>
-            <span> - - : - - </span>
-        </ng-template>
     </div>
 </mat-card>
+
+<ng-template #noresult>
+    <div class="time">
+        <mat-icon
+        matTooltip="Login to track your best score"
+        matTooltipPosition="left"
+        >
+            emoji_events
+        </mat-icon>
+        <span> - - : - - </span>
+    </div>
+</ng-template>

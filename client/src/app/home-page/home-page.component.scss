@@ -5,8 +5,7 @@
     height: 100%;
 }
 
-.game-card {
-    width: 20rem;
+.game-card {    
 
     mat-card-header {
         justify-content: center;
@@ -16,7 +15,7 @@
       position: relative;
       display: grid;
       margin-top: 16px;
-      height: calc(20rem + 32px);
+      height: 300px;
 
       .image-spinner {
         position: absolute;

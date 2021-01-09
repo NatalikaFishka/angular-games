@@ -1,7 +1,5 @@
 <div class="content">
-  <div class="timer"><small>Current score:</small> {{gameResultService.gameTimer$ | async | secondsConverter}}</div>
-  <div class="timer" *ngIf="bestPreviousResult$ | async as bestResult"><small>Best score:</small> {{bestResult | secondsConverter}}</div>
-
+  
   <form [formGroup]='form' (submit)="formSubmit()">
     <mat-form-field appearance='outline'>
         <mat-label>Cards in game</mat-label>

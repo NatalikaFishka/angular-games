@@ -9,13 +9,15 @@ import { CardComponent } from './components/card/card.component';
 import { ToolSettingsComponent } from './components/tool-settings/tool-settings.component';
 import { SharedModule } from '../shared/shared.module';
 import { GamePageComponent } from './game-page.component';
+import { TrackResultsComponent } from './components/track-results/track-results.component';
 
 @NgModule({
     declarations: [
         GamePageComponent,
         BoardComponent,
         CardComponent,
-        ToolSettingsComponent
+        ToolSettingsComponent,
+        TrackResultsComponent
     ],
     imports: [
         CommonModule,

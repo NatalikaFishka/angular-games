@@ -16,7 +16,8 @@
     }
 
     &.narrow {
+        background-color: green;
         width: calc(100vw - 56px - 2rem);
-        height: calc(100vw - 56px - 2rem);
+        // height: calc(100vw - 56px - 2rem);
     }
 }

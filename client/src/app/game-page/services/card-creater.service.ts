@@ -28,7 +28,8 @@ export class CardCreatorService {
     
     const cardContainerSide: number = this.cardContainerRef.containerRef.element.nativeElement.parentElement.clientWidth;
     const scale: number = window.devicePixelRatio;
-    const cardSideInPx: number = Math.trunc(cardContainerSide / Math.ceil(Math.sqrt(cardCongig.length / scale)));
+    console.log(scale)
+    const cardSideInPx: number = Math.trunc(cardContainerSide / Math.ceil(Math.sqrt(cardCongig.length )) / scale);
     const cardSide: string = `calc(${cardSideInPx}px - 1vw)`;
         
     cardCongig.forEach((cardData) => {

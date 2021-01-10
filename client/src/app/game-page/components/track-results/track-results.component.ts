@@ -13,7 +13,7 @@ import { GameResultService } from "../../services/game-result.service";
 })
 export class TrackResultsComponent implements OnInit, OnDestroy{
 
-    private isLoggedIn$: Observable<boolean>;
+    public isLoggedIn$: Observable<boolean>;
     private isLoggedInSub: Subscription | undefined = undefined;
 
     public bestPreviousResult$: Observable<any | undefined>;

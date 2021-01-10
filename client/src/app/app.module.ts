@@ -16,7 +16,7 @@ import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,

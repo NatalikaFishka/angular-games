@@ -24,14 +24,13 @@ export class CardCreatorService {
 
   createCards(cardContainerRef: ComponentRefDirective): void {
     this.cardContainerRef = cardContainerRef;
-    const cardCongig: Dino[] = this.cardConfigGeneratorService.generateFinalConfig();
+    const cardConfig: Dino[] = this.cardConfigGeneratorService.generateFinalConfig();
     
     const cardContainerSide: number = this.cardContainerRef.containerRef.element.nativeElement.parentElement.clientWidth;
-    const scale: number = window.devicePixelRatio;
-    const cardSideInPx: number = Math.trunc(cardContainerSide / Math.ceil(Math.sqrt(cardCongig.length )));
+    const cardSideInPx: number = Math.trunc(cardContainerSide / Math.ceil(Math.sqrt(cardConfig.length )));
     const cardSide: string = `calc(${cardSideInPx}px - 1vw)`;
         
-    cardCongig.forEach((cardData) => {
+    cardConfig.forEach((cardData) => {
       
       this.cardComponent = cardContainerRef.containerRef.createComponent(this.cardFactory);
       this.cardComponent.instance.cardData = cardData; 

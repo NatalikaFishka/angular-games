@@ -45,11 +45,9 @@ export class CardCreatorService {
     this.cardContainerRef.containerRef.clear();
   }
   
-  createNewGame(gameSettings: GameSettings) {
+  createNewGame() {
     this.destroyCards();
     this.gameResultService.resetGame();    
-    this.gameResultService.setGameConfig(gameSettings);
-    this.cardConfigGeneratorService.setGameConfig(gameSettings);
     this.createCards(this.cardContainerRef);
   }
 

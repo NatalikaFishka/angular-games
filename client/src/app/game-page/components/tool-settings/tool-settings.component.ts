@@ -36,13 +36,13 @@ export class ToolSettingsComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.store.dispatch(setGameSettings({payload: this.form.value}));
   }
-
+  
   ngOnDestroy(): void {
     this.gameResultService.resetGame();
   }
 
   formSubmit() {
     this.store.dispatch(setGameSettings({payload: this.form.value}));
-    this.cardCreatorService.createNewGame(this.form.value);
+    this.cardCreatorService.createNewGame();
   }
 }

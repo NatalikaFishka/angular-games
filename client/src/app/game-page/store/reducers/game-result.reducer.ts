@@ -10,8 +10,8 @@ export interface GameResultState {
     bestPreviousResults: Array<MemoryGameResult>;
     loading: boolean;
     error: Error | undefined;
-    cardsInGame: number | undefined;
-    matchesPerCard: number | undefined;
+    cardsInGame: number ;
+    matchesPerCard: number ;
     // countMatchedCards: number;
     // gameState: GameState;
     // gameTimer: number;
@@ -21,8 +21,8 @@ const initialState: GameResultState = {
     bestPreviousResults: [],
     loading: false,
     error: undefined,
-    cardsInGame: undefined,
-    matchesPerCard: undefined,
+    cardsInGame: GAME_SETTINGS.cardsInGame,
+    matchesPerCard: GAME_SETTINGS.matchesPerCard,
     // countMatchedCards: 0,
     // gameState: GameState.notStarted,
     // gameTimer: 0

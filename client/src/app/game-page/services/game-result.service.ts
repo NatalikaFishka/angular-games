@@ -2,7 +2,7 @@ import { ComponentRef, Injectable } from '@angular/core';
 import { allMatch } from '../utils';
 import { GAME_SETTINGS } from '../config'
 import { GameSettings, GameState, MemoryGameResult, SaveResult } from '../models';
-import { BehaviorSubject, interval, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, interval, Observable, Subscription, combineLatest } from 'rxjs';
 import {filter, map, switchMap, take, takeLast, takeUntil, tap} from 'rxjs/operators';
 import { CardComponent } from '../components/card/card.component';
 import { HttpClient } from '@angular/common/http';
@@ -15,8 +15,12 @@ import { AppStore } from 'src/app/app-store.model';
 })
 export class GameResultService {
 
-  private matchesPerCard: number = GAME_SETTINGS.matchesPerCard;
-  private cardsInGame: number = GAME_SETTINGS.cardsInGame;
+  private matchesPerCard!: number;
+  private cardsInGame!: number;
+
+  private matchesPerCard$: Observable<number>;
+  private cardsInGame$: Observable<number>;
+
   private countMatchedCards: number = 0;
   private gameCardsComponents: ComponentRef<CardComponent>[] = [];
   private openedCardsComponent: CardComponent[] = [];
@@ -35,7 +39,9 @@ export class GameResultService {
     private store: Store<AppStore>
   ) {
     this.isLoggedIn$ = this.store.select(state => state.authUser.isAuthenticated);
-    this.bestPreviousResults$ = this.store.select(state => state.memoryGameResults.bestPreviousResults)
+    this.bestPreviousResults$ = this.store.select(state => state.memoryGameResults.bestPreviousResults);
+    this.matchesPerCard$ = this.store.select(state => state.memoryGameResults.matchesPerCard);
+    this.cardsInGame$ = this.store.select(state => state.memoryGameResults.cardsInGame);
   }
 
   public openCard(cardComponent: CardComponent) {
@@ -49,15 +55,16 @@ export class GameResultService {
 
     this.openedCards.push(cardComponent.cardData.name);
     this.openedCardsComponent.push(cardComponent);
-    
-    if(this.openedCards.length === this.matchesPerCard) {
-      setTimeout(() => this.checkForMatch(), 500);
-    }
-  }
 
-  public setGameConfig(gameSettings: GameSettings) {
-    this.matchesPerCard = gameSettings.matchesPerCard;
-    this.cardsInGame = gameSettings.cardsInGame;
+    this.matchesPerCard$.pipe(
+      take(1)
+    ).subscribe(
+      matchesPerCard => {
+        if(this.openedCards.length === matchesPerCard) {
+          setTimeout(() => this.checkForMatch(), 500);
+        }
+      }
+    )
   }
 
   public addGameCardComponent(cardComponentRef: ComponentRef<CardComponent>) {
@@ -96,6 +103,11 @@ export class GameResultService {
   private isGameFinished() {
 
     this.countMatchedCards++; 
+
+    combineLatest([this.matchesPerCard$, this.cardsInGame$]).subscribe(res => {
+     this.matchesPerCard = res[0];
+      this.cardsInGame = res[1];
+    })
 
     if(this.countMatchedCards === this.cardsInGame * this.matchesPerCard) {
 

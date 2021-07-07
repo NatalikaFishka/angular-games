@@ -1,5 +1,5 @@
 import { Component,  Input, ViewRef } from '@angular/core';
-import { CardState, Dino } from '../../models';
+import { CardState, CardImageData } from '../../models';
 import { GameResultService } from '../../services/game-result.service';
 import { CardFlipAnimation } from './card.animation';
 
@@ -15,7 +15,7 @@ export class CardComponent {
   isGameOver: boolean = false;
   startFinalAnimation: boolean = false;
 
-  @Input() cardData!: Dino;
+  @Input() cardData!: CardImageData;
   @Input() cardSide!: string;
 
   @Input() selfViewRef!: ViewRef;

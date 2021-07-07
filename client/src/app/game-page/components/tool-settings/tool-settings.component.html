@@ -1,30 +1,35 @@
 <mat-card class="content">
   <mat-card-header>
     <mat-card-title>Game Settings</mat-card-title>
-  </mat-card-header>  
+  </mat-card-header>
   <form [formGroup]='form' (submit)="formSubmit()">
     <mat-form-field appearance='outline'>
-        <mat-label>Cards in game</mat-label>
-        <mat-select formControlName='cardsInGame'>
-          <mat-option *ngFor="let number of cardsInPlay | numberToArray" [value]="number">
-            {{number}}
-          </mat-option>
-        </mat-select>
+      <mat-label>Cards category</mat-label>
+      <mat-select formControlName='cardsCategory'>
+        <mat-option *ngFor="let category of cardsCategory" [value]="category">
+          {{category}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-  
+
     <mat-form-field appearance='outline'>
-        <mat-label>Matches per card</mat-label>
-        <mat-select formControlName='matchesPerCard'>
-          <mat-option *ngFor="let number of maxMatchesPerCard | numberToArray:minMatchesPerCard" [value]="number">
-            {{number}}
-          </mat-option>
-        </mat-select>
+      <mat-label>Cards in game</mat-label>
+      <mat-select formControlName='cardsInGame'>
+        <mat-option *ngFor="let number of cardsInPlay | numberToArray" [value]="number">
+          {{number}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-  
-    <button 
-        type="submit"        
-        mat-raised-button 
-        color='primary'
-        >Start game</button>
+
+    <mat-form-field appearance='outline'>
+      <mat-label>Matches per card</mat-label>
+      <mat-select formControlName='matchesPerCard'>
+        <mat-option *ngFor="let number of maxMatchesPerCard | numberToArray:minMatchesPerCard" [value]="number">
+          {{number}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color='primary'>Start game</button>
   </form>
 </mat-card>

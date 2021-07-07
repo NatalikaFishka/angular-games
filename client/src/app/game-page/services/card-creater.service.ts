@@ -1,7 +1,7 @@
 import { ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable } from '@angular/core';
 import { ComponentRefDirective } from '../../shared/directives/reference.directive';
 import { CardComponent } from '../components/card/card.component';
-import { Dino, GameSettings } from '../models';
+import { CardImageData, GameSettings } from '../models';
 import { CardConfigGeneratorService } from './card-config-generator.service';
 import { GameResultService } from './game-result.service';
 
@@ -24,7 +24,7 @@ export class CardCreatorService {
 
   createCards(cardContainerRef: ComponentRefDirective): void {
     this.cardContainerRef = cardContainerRef;
-    const cardConfig: Dino[] = this.cardConfigGeneratorService.generateFinalConfig();
+    const cardConfig: CardImageData[] = this.cardConfigGeneratorService.generateFinalConfig();
     
     const cardContainerSide: number = this.cardContainerRef.containerRef.element.nativeElement.parentElement.clientWidth;
     const cardSideInPx: number = Math.trunc(cardContainerSide / Math.ceil(Math.sqrt(cardConfig.length )));

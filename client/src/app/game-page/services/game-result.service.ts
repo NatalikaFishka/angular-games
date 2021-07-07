@@ -1,7 +1,7 @@
 import { ComponentRef, Injectable } from '@angular/core';
 import { allMatch } from '../utils';
 import { GAME_SETTINGS } from '../config'
-import { GameSettings, GameState, MemoryGameResult, SaveResult } from '../models';
+import { CardsCategory, GameSettings, GameState, MemoryGameResult, SaveResult } from '../models';
 import { BehaviorSubject, interval, Observable, Subscription, combineLatest } from 'rxjs';
 import {filter, map, switchMap, take, takeLast, takeUntil, tap} from 'rxjs/operators';
 import { CardComponent } from '../components/card/card.component';
@@ -17,9 +17,11 @@ export class GameResultService {
 
   private matchesPerCard!: number;
   private cardsInGame!: number;
+  private cardsCategory!: CardsCategory;
 
   private matchesPerCard$: Observable<number>;
   private cardsInGame$: Observable<number>;
+  private cardsCategory$: Observable<CardsCategory>;
 
   private countMatchedCards: number = 0;
   private gameCardsComponents: ComponentRef<CardComponent>[] = [];
@@ -42,6 +44,7 @@ export class GameResultService {
     this.bestPreviousResults$ = this.store.select(state => state.memoryGameResults.bestPreviousResults);
     this.matchesPerCard$ = this.store.select(state => state.memoryGameResults.matchesPerCard);
     this.cardsInGame$ = this.store.select(state => state.memoryGameResults.cardsInGame);
+    this.cardsCategory$ = this.store.select(state => state.memoryGameResults.cardsCategory);
   }
 
   public openCard(cardComponent: CardComponent) {
@@ -104,9 +107,10 @@ export class GameResultService {
 
     this.countMatchedCards++; 
 
-    combineLatest([this.matchesPerCard$, this.cardsInGame$]).subscribe(res => {
-     this.matchesPerCard = res[0];
-      this.cardsInGame = res[1];
+    combineLatest([this.cardsCategory$, this.matchesPerCard$, this.cardsInGame$]).subscribe(res => {
+      this.cardsCategory = res[0];
+      this.matchesPerCard = res[1];
+      this.cardsInGame = res[2];
     })
 
     if(this.countMatchedCards === this.cardsInGame * this.matchesPerCard) {
@@ -120,12 +124,14 @@ export class GameResultService {
           this.gameTimer$.pipe(take(1)).subscribe((time) => {
             
             const bestScore = results.find(result => (
+                result.cardsCategory === this.cardsCategory &&
                 result.cardsInGame === this.cardsInGame && 
                 result.matchesPerCard === this.matchesPerCard));
 
             if(!bestScore) {
               this.store.dispatch(saveGameResult({payload: {
                 score: time,
+                cardsCategory: this.cardsCategory,
                 cardsInGame: this.cardsInGame,
                 matchesPerCard: this.matchesPerCard
               }}))
@@ -133,6 +139,7 @@ export class GameResultService {
               this.store.dispatch(updateGameResult({ payload: {
                 id: bestScore.id,
                 score: time,
+                cardsCategory: this.cardsCategory,
                 cardsInGame: this.cardsInGame,
                 matchesPerCard: this.matchesPerCard
               }}));               

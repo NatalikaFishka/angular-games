@@ -12,6 +12,7 @@ router.get('/', authMiddleware, async (req, res) => {
             return { id, cardsCategory, score, cardsInGame, matchesPerCard, data }
         });
 
+        console.log('Cookies: ', req.cookies);
         res.json(userResultsForFrontEnd);
 
     } catch (e) {
@@ -30,8 +31,6 @@ router.post('/save', authMiddleware, async (req, res) => {
             matchesPerCard: req.body.matchesPerCard
         });
         const { id, cardsCategory, score, cardsInGame, matchesPerCard, data } = await result.save();
-
-        console.log("req", req)
 
         res.json({ id, cardsCategory, score, cardsInGame, matchesPerCard, data });
 

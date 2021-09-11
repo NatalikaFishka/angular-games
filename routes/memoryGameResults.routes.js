@@ -54,8 +54,8 @@ router.post('/update', authMiddleware, async (req, res) => {
 
         const userResults = await Result.find({ owner: req.user.userId });
         const userResultsForFrontEnd = userResults.map((object) => {
-            const { id, score, cardsInGame, matchesPerCard, data } = object;
-            return { id, score, cardsInGame, matchesPerCard, data }
+            const { id, cardsCategory, score, cardsInGame, matchesPerCard, data } = object;
+            return { id, cardsCategory, score, cardsInGame, matchesPerCard, data }
         });
 
         res.json(userResultsForFrontEnd)

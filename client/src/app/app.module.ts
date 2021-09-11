@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GamePageModule } from './match-cards-game/game-page.module';
+import { MatchCardsGameModule } from './match-cards-game/match-cards-game.module';
 import { HomePageModule } from './home-page/home-page.module';
 import { AppShellModule } from './app-shell/app-shell.module';
 import { StoreModule } from '@ngrx/store';
@@ -21,7 +21,7 @@ import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GamePageModule,
+    MatchCardsGameModule,
     HomePageModule,
     AppShellModule,
     StoreModule.forRoot({

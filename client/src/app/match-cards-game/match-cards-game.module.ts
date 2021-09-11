@@ -8,7 +8,7 @@ import { BoardComponent } from './components/board/board.component';
 import { CardComponent } from './components/card/card.component';
 import { ToolSettingsComponent } from './components/tool-settings/tool-settings.component';
 import { SharedModule } from '../shared/shared.module';
-import { GamePageComponent } from './game-page.component';
+import { MatchCardsGameComponent } from './match-cards-game.component';
 import { TrackResultsComponent } from './components/track-results/track-results.component';
 import { MatIconModule } from '@angular/material/icon';
 import {MatCardModule} from '@angular/material/card';
@@ -16,7 +16,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
-        GamePageComponent,
+        MatchCardsGameComponent,
         BoardComponent,
         CardComponent,
         ToolSettingsComponent,
@@ -35,4 +35,4 @@ import {MatTooltipModule} from '@angular/material/tooltip';
         MatTooltipModule
     ]
 })
-export class GamePageModule {}
+export class MatchCardsGameModule {}

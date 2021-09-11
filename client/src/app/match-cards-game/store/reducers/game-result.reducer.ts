@@ -1,7 +1,6 @@
-import { act } from "@ngrx/effects";
 import { createReducer, on } from "@ngrx/store";
 import { GAME_SETTINGS } from "../../config";
-import { CardsCategory, GameState, MemoryGameResult } from "../../models";
+import { CardsCategory, MemoryGameResult } from "../../models";
 import * as memoryGameActions from '../actions/game-result.actions';
 
 // not used store date commented below

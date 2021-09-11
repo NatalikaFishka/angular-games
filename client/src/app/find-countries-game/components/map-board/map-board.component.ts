@@ -3,6 +3,9 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 // import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
 import russiaMap from "@amcharts/amcharts4-geodata/russiaLow";
+import { AppStore } from "src/app/app-store.model";
+import { Store } from "@ngrx/store";
+import { setMapConfig } from "../../store/actions/find-countries-game.actions";
 
 @Component({
     selector: "app-map-board",
@@ -18,12 +21,19 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
     private polygonSeries: am4maps.MapPolygonSeries;
     public mapData: Array<string> = [];
 
+    constructor(
+        private store: Store<AppStore>
+    ) {}
+
     ngAfterViewChecked() {
         if(!this.mapData.length) {
             for (let dataSet of this.polygonSeries.data) {
                 this.mapData.push(dataSet.name)
             }
-            console.log('MAP DATA', this.mapData)
+            
+            if(this.mapData.length) {
+                this.store.dispatch(setMapConfig({payload: this.mapData}))
+            }
         }
     }
 

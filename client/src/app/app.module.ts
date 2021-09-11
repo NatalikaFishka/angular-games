@@ -14,6 +14,7 @@ import { GameResultEffects } from './match-cards-game/store/effects/game-result.
 import { AuthUserReducer } from './app-shell/store/reducer/auth.reducer';
 import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
 import { FindCountriesGameModule } from './find-countries-game/find-countries-game.module';
+import { FindCountriesGameReducer } from './find-countries-game/store/reducer/find-countries-game.reducer';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { FindCountriesGameModule } from './find-countries-game/find-countries-ga
     AppShellModule,
     StoreModule.forRoot({
       memoryGameResults: GameResultReducer,
-      authUser: AuthUserReducer
+      authUser: AuthUserReducer,
+      findCountriesGame: FindCountriesGameReducer
     }),
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([GameResultEffects, AuthUserEffects])

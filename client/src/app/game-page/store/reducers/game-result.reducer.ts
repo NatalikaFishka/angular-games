@@ -1,7 +1,7 @@
 import { act } from "@ngrx/effects";
 import { createReducer, on } from "@ngrx/store";
 import { GAME_SETTINGS } from "../../config";
-import { GameState, MemoryGameResult } from "../../models";
+import { CardsCategory, GameState, MemoryGameResult } from "../../models";
 import * as memoryGameActions from '../actions/game-result.actions';
 
 // not used store date commented below
@@ -10,8 +10,9 @@ export interface GameResultState {
     bestPreviousResults: Array<MemoryGameResult>;
     loading: boolean;
     error: Error | undefined;
-    cardsInGame: number | undefined;
-    matchesPerCard: number | undefined;
+    cardsCategory: CardsCategory;
+    cardsInGame: number ;
+    matchesPerCard: number ;
     // countMatchedCards: number;
     // gameState: GameState;
     // gameTimer: number;
@@ -21,8 +22,9 @@ const initialState: GameResultState = {
     bestPreviousResults: [],
     loading: false,
     error: undefined,
-    cardsInGame: undefined,
-    matchesPerCard: undefined,
+    cardsCategory: CardsCategory.DINO,
+    cardsInGame: GAME_SETTINGS.cardsInGame,
+    matchesPerCard: GAME_SETTINGS.matchesPerCard,
     // countMatchedCards: 0,
     // gameState: GameState.notStarted,
     // gameTimer: 0
@@ -86,6 +88,7 @@ export const GameResultReducer = createReducer<any>(
 
     on(memoryGameActions.setGameSettings, (state, action) => ({
         ...state,
+        cardsCategory: action.payload.cardsCategory,
         cardsInGame: action.payload.cardsInGame,
         matchesPerCard: action.payload.matchesPerCard
     }))

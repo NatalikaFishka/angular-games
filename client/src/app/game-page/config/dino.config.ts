@@ -1,6 +1,6 @@
-import {Dino} from "../models/index"
+import {CardImageData} from "../models/index"
 
-export const DINO_CONFIG: Dino[] = [
+export const DINO_CONFIG: CardImageData[] = [
     {
         name: "dino1",
         image: 'https://res.cloudinary.com/dkqohzqus/image/upload/v1610100714/AngularGames/CardMemoryGame/dino1_clljck.jpg'

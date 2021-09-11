@@ -21,7 +21,7 @@ export class AuthUserEffects {
         ofType(login),
         switchMap((action) => this.authService.login(action.payload).pipe(
             map((response) => { 
-                this.authService.setUserDataToLocalStorage(response);
+                // this.authService.setUserDataToLocalStorage(response);
                 this.showToast(response.message);
                 return loginSuccess({payload: response});
             }),
@@ -36,7 +36,7 @@ export class AuthUserEffects {
         ofType(registration),
         switchMap((action) => this.authService.createNewUser(action.payload).pipe(
             map((response) => { 
-                this.authService.setUserDataToLocalStorage(response);
+                // this.authService.setUserDataToLocalStorage(response);
                 this.showToast(response.message);
                 return registrationSuccess({ payload: response });
             }),

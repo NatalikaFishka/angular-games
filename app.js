@@ -2,15 +2,17 @@ const express = require('express');
 const config = require('config');
 const path = require('path');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
-app.use(express.json({ extended: true}))
+app.use(express.json({ extended: true }));
+app.use(cookieParser());
 
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/memoryGameResults', require('./routes/memoryGameResults.routes'))
 
-if(process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use('/', express.static(path.join(__dirname, 'dist')));
 
     app.get('*', (req, res) => {
@@ -28,9 +30,9 @@ async function start() {
             useCreateIndex: true
         });
         app.listen(PORT, () => console.log(`App was started on port ${PORT}!`));
-    } catch(e) {
+    } catch (e) {
         console.log("Server Error", e.message);
-            process.exit(1)
+        process.exit(1)
     }
 }
 

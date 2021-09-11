@@ -11,16 +11,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {MatInputModule} from '@angular/material/input';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { CommonModule } from "@angular/common";
-import { AuthInterceptor } from "./services/auth.interceptor";
-
-const AUTH_INTERCEPTOR: Provider = {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true,
-}
 
 @NgModule({
     declarations: [AppShellComponent, AuthDialogComponent],
@@ -40,7 +33,6 @@ const AUTH_INTERCEPTOR: Provider = {
         HttpClientModule,
         MatSnackBarModule
     ],
-    providers: [AUTH_INTERCEPTOR],
     exports: [
         AppShellComponent
     ]

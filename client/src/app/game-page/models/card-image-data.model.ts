@@ -1,4 +1,4 @@
-export interface Dino {
+export interface CardImageData {
     name: string;
     image: string;
 }

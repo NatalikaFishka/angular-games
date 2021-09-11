@@ -16,10 +16,11 @@ export const updateGameResultFailure = createAction('[GAME RESULT] Update Result
 
 export const clearGameResultsInStore = createAction('[GAME RESULT] Clear');
 
+export const setGameSettings = createAction('[GAME RESULT] Set Game Settings', props<{payload: any}>());
+
 // not used action yet
 
 export const gameStarted = createAction('[GAME RESULT] Game Started');
 export const increaseTimer = createAction('[GAME RESULT] Game Timer Increased', props<{time: number}>());
 export const gameFinished = createAction('[GAME RESULT] Game Finished', props<{gameFinalTime: number}>());
 export const resetGame = createAction('[GAME RESULT] Reset Game');
-export const setGameSettings = createAction('[GAME RESULT] Set Game Settings', props<{payload: any}>());

@@ -35,15 +35,15 @@ export class AuthService {
   logout(): void {
     this.store.dispatch(logout());
     this.store.dispatch(clearGameResultsInStore());
-    this.clearLocalStorage();
+    // this.clearLocalStorage();
   }
 
-  setUserDataToLocalStorage(resUserData: AuthServerResponse): void {
-    const { token } = resUserData;
-    localStorage.setItem(this.USER_DATA, JSON.stringify({token}));
-  }
+  // setUserDataToLocalStorage(resUserData: AuthServerResponse): void {
+  //   const { token } = resUserData;
+  //   localStorage.setItem(this.USER_DATA, JSON.stringify({token}));
+  // }
 
-  clearLocalStorage(): void {
-    localStorage.removeItem(this.USER_DATA);
-  }
+  // clearLocalStorage(): void {
+  //   localStorage.removeItem(this.USER_DATA);
+  // }
 }

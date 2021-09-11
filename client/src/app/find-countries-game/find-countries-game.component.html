@@ -1,1 +1,5 @@
-<p>find-countries-game works!</p>
+<div class='main' componentRef [ngClass]='isScreenWide ? "wide": "narrow"'>
+    <app-map-board></app-map-board>
+    <app-find-countries-results></app-find-countries-results>
+    <app-find-countries-settings></app-find-countries-settings>
+</div>

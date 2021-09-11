@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FindCountriesGameComponent implements OnInit {
 
-  constructor() { }
+  isScreenWide!: boolean;
 
   ngOnInit(): void {
+    const screenWidth = window.innerWidth;
+    const screenHeigh = window.innerHeight;
+
+    if(screenWidth >= screenHeigh) {
+      this.isScreenWide = true;
+    } else {
+      this.isScreenWide = false;    
+    }     
   }
 
 }

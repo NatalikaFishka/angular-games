@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GamePageModule } from './game-page/game-page.module';
+import { GamePageModule } from './match-cards-game/game-page.module';
 import { HomePageModule } from './home-page/home-page.module';
 import { AppShellModule } from './app-shell/app-shell.module';
 import { StoreModule } from '@ngrx/store';
-import { GameResultReducer } from './game-page/store/reducers/game-result.reducer';
+import { GameResultReducer } from './match-cards-game/store/reducers/game-result.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { GameResultEffects } from './game-page/store/effects/game-result.effect';
+import { GameResultEffects } from './match-cards-game/store/effects/game-result.effect';
 import { AuthUserReducer } from './app-shell/store/reducer/auth.reducer';
 import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
 

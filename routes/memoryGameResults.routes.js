@@ -5,14 +5,13 @@ const router = Router();
 
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        console.log(req.user.userId)
+
         const userResults = await Result.find({ owner: req.user.userId });
         const userResultsForFrontEnd = userResults.map((object) => {
             const { id, cardsCategory, score, cardsInGame, matchesPerCard, data } = object;
             return { id, cardsCategory, score, cardsInGame, matchesPerCard, data }
         });
 
-        console.log('Cookies: ', req.cookies);
         res.json(userResultsForFrontEnd);
 
     } catch (e) {

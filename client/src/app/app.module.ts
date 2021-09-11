@@ -13,15 +13,17 @@ import { EffectsModule } from '@ngrx/effects';
 import { GameResultEffects } from './match-cards-game/store/effects/game-result.effect';
 import { AuthUserReducer } from './app-shell/store/reducer/auth.reducer';
 import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
+import { FindCountriesGameModule } from './find-countries-game/find-countries-game.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatchCardsGameModule,
+    FindCountriesGameModule,
     HomePageModule,
     AppShellModule,
     StoreModule.forRoot({

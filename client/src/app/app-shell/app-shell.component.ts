@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AppStore } from '../app-store.model';
 import { AuthDialogComponent } from './auth-dialog/auth-dialog.component';
 import { AuthService } from './services/auth.service';
+import { logout } from './store/actions/auth.actions';
 
 @Component({
   selector: 'app-app-shell',
@@ -25,6 +26,10 @@ export class AppShellComponent {
 
   openDialog(): void {
     this.dialog.open(AuthDialogComponent);
+  }
+
+  onLogout(): void {
+    this.store.dispatch(logout());
   }
   
 }

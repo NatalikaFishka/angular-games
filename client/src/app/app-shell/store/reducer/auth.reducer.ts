@@ -1,6 +1,5 @@
-import { state } from "@angular/animations";
 import { createReducer, on } from "@ngrx/store";
-import { getAuthenticatedUserSuccess, loginSuccess, logout, registrationSuccess } from "../actions/auth.actions";
+import { getAuthenticatedUserSuccess, loginSuccess, logoutSuccess, registrationSuccess } from "../actions/auth.actions";
 
 export interface AuthUserState {
     isAuthenticated: boolean;
@@ -21,5 +20,5 @@ export const AuthUserReducer = createReducer<any>(
     on(loginSuccess, (state, action) => ({...state, isAuthenticated: true, email: action.payload.email})),
     on(registrationSuccess, (state, action) => ({...state, isAuthenticated: true, email: action.payload.email})),
     on(getAuthenticatedUserSuccess, (state, action) => ({...state, isAuthenticated: true, email: action.payload.email})),
-    on(logout, (state) => ({...state, isAuthenticated: false, email: undefined}))
+    on(logoutSuccess, (state) => ({...state, isAuthenticated: false, email: undefined}))
 )

@@ -98,6 +98,16 @@ router.post('/login',
         }
     });
 
+router.delete('/logout', authMiddleware, async (req, res) => {
+    try {
+
+        res.clearCookie('gameToken');
+        return res.status(200).json({ message: "You were logged out!" })
+    } catch (e) {
+        return res.status(500).json({ message: "Something went wrong" })
+    }
+});
+
 router.get('/', authMiddleware, async (req, res) => {
     try {
 

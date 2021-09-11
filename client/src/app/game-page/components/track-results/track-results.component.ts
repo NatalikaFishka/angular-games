@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable, of, Subscription } from "rxjs";
-import { filter, map, switchMap } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import { CardsCategory, MemoryGameResult } from "../../models";
 import { GameResultService } from "../../services/game-result.service";
@@ -47,9 +47,13 @@ export class TrackResultsComponent implements OnInit, OnDestroy{
     }
 
     ngOnInit(): void {
-        this.isLoggedInSub = this.isLoggedIn$.pipe(
-            filter((isLoggedIn) => isLoggedIn)
-          ).subscribe(() => this.gameResultService.dispatchGetResultsAction());
+        this.isLoggedInSub = this.isLoggedIn$.subscribe((isLoggedIn) => {
+              if(isLoggedIn) {
+                  this.gameResultService.dispatchGetResultsAction();
+                } else {
+                  this.gameResultService.dispatchClearResultsAction();
+              }
+            });
       
     }
 

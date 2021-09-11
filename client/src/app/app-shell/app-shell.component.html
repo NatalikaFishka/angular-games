@@ -1,13 +1,14 @@
 <mat-toolbar color="primary">
-    <button mat-icon-button [matMenuTriggerFor]="globalNav">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>Games App</span>
-    <span class="spacer"></span>
-    <button *ngIf="!(authenticatedUserEmail$ | async); else authenticatedUser"  mat-flat-button color="primary" (click)="openDialog()">
-      <mat-icon>person</mat-icon>
-      <span> Login</span>
-    </button>
+  <button mat-icon-button [matMenuTriggerFor]="globalNav">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Games App</span>
+  <span class="spacer"></span>
+  <button *ngIf="!(authenticatedUserEmail$ | async); else authenticatedUser" mat-flat-button color="primary"
+    (click)="openDialog()">
+    <mat-icon>person</mat-icon>
+    <span> Login</span>
+  </button>
 </mat-toolbar>
 
 <ng-template #authenticatedUser>
@@ -25,7 +26,7 @@
 </mat-menu>
 
 <mat-menu #logout="matMenu">
-  <button mat-menu-item (click)="authService.logout()">
+  <button mat-menu-item (click)="onLogout()">
     <mat-icon>login</mat-icon>
     <span>Logout</span>
   </button>

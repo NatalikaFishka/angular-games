@@ -7,7 +7,7 @@ import {filter, map, switchMap, take, takeLast, takeUntil, tap} from 'rxjs/opera
 import { CardComponent } from '../components/card/card.component';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
-import {getGameResults, saveGameResult, updateGameResult, updateGameResultFailure} from '../store/actions/game-result.actions'
+import {getGameResults, saveGameResult, updateGameResult, clearGameResultsInStore} from '../store/actions/game-result.actions'
 import { AppStore } from 'src/app/app-store.model';
 
 @Injectable({
@@ -162,6 +162,10 @@ export class GameResultService {
   public dispatchGetResultsAction(): void {
     this.store.dispatch(getGameResults());
   }
+
+  public dispatchClearResultsAction(): void {
+    this.store.dispatch(clearGameResultsInStore());
+  }  
 
   public getUserResults(): Observable<any> {
     return this.http.get<any>('/api/memoryGameResults')

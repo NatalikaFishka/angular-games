@@ -7,6 +7,8 @@ export const loginSuccess = createAction('[Auth] Login Success', props<{payload:
 export const loginFailure = createAction('[Auth] Login Failure', props<{payload: HttpErrorResponse}>());
 
 export const logout = createAction('[Auth] Logout');
+export const logoutSuccess = createAction('[Auth] Logout Success');
+export const logoutFailure = createAction('[Auth] Logout Failure');
 
 export const registration = createAction('[Auth] Registration', props<{payload: UserData}>());
 export const registrationSuccess = createAction('[Auth] Registration Success', props<{payload: AuthServerResponse}>());

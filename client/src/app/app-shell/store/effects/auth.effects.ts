@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType, ROOT_EFFECTS_INIT } from "@ngrx/effects"
 import { EMPTY, of } from "rxjs";
 import { catchError, map, mergeMap, switchMap } from "rxjs/operators";
 import { AuthService } from "../../services/auth.service";
-import { getAuthenticatedUser, getAuthenticatedUserFailure, getAuthenticatedUserSuccess, login, loginFailure, loginSuccess, registration, registrationFailure, registrationSuccess } from "../actions/auth.actions";
+import { getAuthenticatedUser, getAuthenticatedUserFailure, getAuthenticatedUserSuccess, login, loginFailure, loginSuccess, logout, logoutSuccess, logoutFailure, registration, registrationFailure, registrationSuccess } from "../actions/auth.actions";
 
 @Injectable()
 export class AuthUserEffects {
@@ -21,7 +21,6 @@ export class AuthUserEffects {
         ofType(login),
         switchMap((action) => this.authService.login(action.payload).pipe(
             map((response) => { 
-                // this.authService.setUserDataToLocalStorage(response);
                 this.showToast(response.message);
                 return loginSuccess({payload: response});
             }),
@@ -30,13 +29,26 @@ export class AuthUserEffects {
                 return of(loginFailure({payload: error}))
             })
         ))
+    ));
+
+    logout$ = createEffect(() => this.actions$.pipe(
+        ofType(logout),
+        switchMap(() => this.authService.logout().pipe(
+            map((response) => { 
+                this.showToast(response.message);
+                return logoutSuccess();
+            }),
+            catchError((error) => { 
+                this.showToast(error.error.message);
+                return of(logoutFailure())
+            })
+        ))
     ))
             
     registration$ = createEffect(() => this.actions$.pipe(
         ofType(registration),
         switchMap((action) => this.authService.createNewUser(action.payload).pipe(
             map((response) => { 
-                // this.authService.setUserDataToLocalStorage(response);
                 this.showToast(response.message);
                 return registrationSuccess({ payload: response });
             }),

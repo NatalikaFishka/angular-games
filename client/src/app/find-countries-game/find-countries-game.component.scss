@@ -3,6 +3,7 @@
     justify-items: center;
     align-items: center;
     overflow: hidden;
+    position: relative;
     
     &.wide {
         grid-template-columns: 3fr 1fr; 
@@ -24,8 +25,12 @@
 
     app-find-countries-results {
         grid-area: track-results;
+        position: absolute;
+        right: 0;
     }
     app-find-countries-settings {
         grid-area: tool-settings;
+        position: absolute;
+        right: 0;
     }
 }

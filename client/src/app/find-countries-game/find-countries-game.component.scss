@@ -6,9 +6,9 @@
     position: relative;
     
     &.wide {
-        grid-template-columns: 3fr 1fr; 
+        grid-template-columns: 75% 25%; 
         grid-template-areas: "board track-results"
-                            "board tool-settings";
+                                "board tool-settings";
 
     }
 
@@ -21,16 +21,16 @@
 
     app-map-board {
         grid-area: board;
+        width: 100%;
+        height: calc(100vh - 64px);
     }
 
     app-find-countries-results {
         grid-area: track-results;
         position: absolute;
-        right: 0;
     }
     app-find-countries-settings {
         grid-area: tool-settings;
         position: absolute;
-        right: 0;
     }
 }

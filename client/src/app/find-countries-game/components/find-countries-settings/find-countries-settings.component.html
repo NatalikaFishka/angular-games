@@ -1,1 +1,17 @@
-<h1>SETTINGS</h1>
+<mat-card class="content">
+    <mat-card-header>
+      <mat-card-title>Game Settings</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]='form' (submit)="formSubmit()">
+      <mat-form-field appearance='outline'>
+        <mat-label>Map to display</mat-label>
+        <mat-select formControlName='selectedMap'>
+          <mat-option *ngFor="let map of mapsToSelect" [value]="map">
+            {{map}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <button type="submit" mat-raised-button color='primary'>Set map</button>
+    </form>
+  </mat-card>

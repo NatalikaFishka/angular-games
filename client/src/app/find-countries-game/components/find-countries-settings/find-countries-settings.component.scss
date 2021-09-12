@@ -9,9 +9,13 @@
         padding: 1rem;
     }
 
-    .timer {
-        font-size: 2rem;
-        padding: 1rem;
-        line-height: 2.5rem;
+    // .timer {
+    //     font-size: 2rem;
+    //     padding: 1rem;
+    //     line-height: 2.5rem;
+    // }
+
+    .start-game-btn {
+        width: calc(100% - 2rem);
     }
 }

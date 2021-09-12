@@ -1,5 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { Store } from "@ngrx/store";
+import { AppStore } from "src/app/app-store.model";
+import { FindCountriesResultService } from "../../services/find-countries-result.service";
+import * as actions from "../../store/actions/find-countries-game.actions";
+
 
 const MapsToSelect = ["Russia", "USA"]
 @Component({
@@ -14,15 +19,24 @@ export class FindCountriesSettingsComponent implements OnInit {
     public form: FormGroup;
 
     constructor(
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private store: Store<AppStore>,
+        private resultService: FindCountriesResultService,
     ) {
         this.form = this.fb.group({
             selectedMap: [this.initialMap]
         })
     }
-    ngOnInit() {}
+    ngOnInit() {
+        this.store.dispatch(actions.setMapSelection({payload: this.form.value.selectedMap}))
+    }
 
     formSubmit() {
         console.log('FORM DATA', this.form.value)
+    }
+
+    startGame() {
+        this.store.dispatch(actions.startGame());
+        this.resultService.trackResults();
     }
 }

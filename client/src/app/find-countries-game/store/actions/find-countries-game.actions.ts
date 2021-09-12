@@ -1,3 +1,11 @@
 import {createAction, props} from '@ngrx/store';
 
-export const setMapConfig = createAction('[FIND COUNTRIES GAME] Set Map Config', props<{ payload: Array<string>}>());
+export const setMapCountries = createAction('[FIND COUNTRIES GAME] Set Map Countries', props<{ payload: Array<string>}>());
+
+export const setMapSelection = createAction('[FIND COUNTRIES GAME] Set Map Selection', props<{ payload: string}>());
+
+export const startGame = createAction('[FIND COUNTRIES GAME] Game Started');
+
+export const setUserSelectionCountry = createAction('[FIND COUNTRIES GAME] Set User Selection Country', props<{ payload: any}>());
+
+export const changeCountryToFind = createAction('[FIND COUNTRIES GAME] Change Country To Find');

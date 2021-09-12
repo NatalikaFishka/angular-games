@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppStore } from '../app-store.model';
+import { ComponentRefDirective } from '../shared/directives/reference.directive';
+import { FindCountriesResultService } from './services/find-countries-result.service';
 
 @Component({
   selector: 'app-find-countries-game',
@@ -7,7 +12,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FindCountriesGameComponent implements OnInit {
 
-  isScreenWide!: boolean;
+  public isScreenWide!: boolean;
+  public isGameOn$: Observable<boolean>;
+
+  constructor(
+    private store: Store<AppStore>,
+  ) {
+    this.isGameOn$ = this.store.select(store => store.findCountriesGame.isGameOn)
+  }
+
 
   ngOnInit(): void {
     const screenWidth = window.innerWidth;
@@ -17,7 +30,8 @@ export class FindCountriesGameComponent implements OnInit {
       this.isScreenWide = true;
     } else {
       this.isScreenWide = false;    
-    }     
+    }    
+    
   }
 
 }

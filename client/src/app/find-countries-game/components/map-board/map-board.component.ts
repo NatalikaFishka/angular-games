@@ -5,7 +5,8 @@ import * as am4maps from "@amcharts/amcharts4/maps";
 import russiaMap from "@amcharts/amcharts4-geodata/russiaLow";
 import { AppStore } from "src/app/app-store.model";
 import { Store } from "@ngrx/store";
-import { setMapConfig } from "../../store/actions/find-countries-game.actions";
+import { setMapCountries, setUserSelectionCountry } from "../../store/actions/find-countries-game.actions";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "app-map-board",
@@ -14,16 +15,18 @@ import { setMapConfig } from "../../store/actions/find-countries-game.actions";
 })
 export class MapBoardComponent implements OnInit, AfterViewChecked {
 
-    private polygonTemplate: any
-    // @ts-ignore: Unreachable code error
-    private chart: am4maps.MapChart;
-    // @ts-ignore: Unreachable code error
-    private polygonSeries: am4maps.MapPolygonSeries;
+    private polygonTemplate: any;
+    private chart!: am4maps.MapChart;
+    private polygonSeries!: am4maps.MapPolygonSeries;
     public mapData: Array<string> = [];
+
+    private foundCountry$: Observable<Array<string>>;
 
     constructor(
         private store: Store<AppStore>
-    ) {}
+    ) {
+        this.foundCountry$ = this.store.select(store => store.findCountriesGame.foundCountry)
+    }
 
     ngAfterViewChecked() {
         if(!this.mapData.length) {
@@ -32,7 +35,7 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
             }
             
             if(this.mapData.length) {
-                this.store.dispatch(setMapConfig({payload: this.mapData}))
+                this.store.dispatch(setMapCountries({payload: this.mapData}))
             }
         }
     }
@@ -45,7 +48,11 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
         this.setPolygonSeries();
         this.configurePolygonTemplate();
         this.configureHoverState();
-        this.setDefaultMapPosition();        
+        this.setDefaultMapPosition();   
+        
+        this.foundCountry$.subscribe(
+            (data) => this.markAsFound(data)
+        )
     }    
    
     /**
@@ -90,13 +97,16 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
         this.polygonTemplate = this.polygonSeries.mapPolygons.template;
         this.polygonTemplate.tooltipText = "{name}";
         this.polygonTemplate.fill = am4core.color("#8c97d3");
+        this.polygonTemplate.propertyFields.fill = "fill";
+        this.polygonTemplate.propertyFields.hoverable = "hoverable";
         this.polygonTemplate.events.on("hit", (ev:any) => {
 
-            console.log(ev.target)
-
+            this.store.dispatch(setUserSelectionCountry({payload: ev.target.dataItem.dataContext}))
             // @ts-ignore: Unreachable code error
             console.log(ev.target.dataItem.dataContext.name);
         });
+
+        // this.polygonTemplate.
     }
 
     /**
@@ -129,21 +139,40 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
     /**
      * Zoom In map
      */
-    zoomIn() {
+    public zoomIn(): void {
         this.chart.zoomIn();
     }
 
     /**
      * Zoom Out map
      */
-    zoomOut() {
+    public zoomOut(): void {
         this.chart.zoomOut();
     }
 
     /**
      * Reset map to it's initial position
      */
-    resetMapSize() {
+    public resetMapSize(): void {
         this.chart.goHome();
+    }
+
+    /**
+     * Mark countries as found
+     */
+    private markAsFound(data: Array<string>): void {
+        if(data.length) {
+            
+            let countriesToFill: any = [];
+            data.forEach((dataId) => {
+                countriesToFill.push({
+                    id: dataId,
+                    hoverable: false,
+                    fill: am4core.color("#F05C5C")
+                })
+            })
+
+            this.polygonSeries.data = countriesToFill;
+        }
     }
 }

@@ -12,6 +12,7 @@ import { SharedModule } from '../shared/shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FindCountriesSnackBarComponent } from './components/find-countries-snack-bar/find-countries-snack-bar.component';
 
 
 
@@ -20,7 +21,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     FindCountriesGameComponent,
     MapBoardComponent,
     FindCountriesResultComponent,
-    FindCountriesSettingsComponent
+    FindCountriesSettingsComponent,
+    FindCountriesSnackBarComponent
   ],
   imports: [
     CommonModule,

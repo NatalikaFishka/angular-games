@@ -1,12 +1,11 @@
-import { state } from "@angular/animations";
 import { createReducer, on } from "@ngrx/store";
-import { Action } from "rxjs/internal/scheduler/Action";
 import * as findCountriesGameActions from '../actions/find-countries-game.actions'
 
 export interface FindCountriesGameState {
     loading: boolean;
     currentMap: string;
     mapData: Array<string>;
+    regionsToFind: number | undefined;
     countryToFind: string;
     isGameOn: boolean;
     userSelection: {
@@ -20,6 +19,7 @@ const initialState: FindCountriesGameState = {
     loading: true,
     currentMap: "",
     mapData: [],
+    regionsToFind: undefined,
     countryToFind: "",
     isGameOn: false,
     userSelection: {
@@ -43,6 +43,7 @@ export const FindCountriesGameReducer = createReducer<any>(
         return {
                 ...state,
                 mapData: allCountries,
+                regionsToFind: action.payload.length,
                 countryToFind: countryToFind,
                 loading: false
         }
@@ -74,6 +75,14 @@ export const FindCountriesGameReducer = createReducer<any>(
                 countryId: ""
             }
         }
-    })
+    }),
+    on(findCountriesGameActions.gameFinished, (state) => ({
+        ...state,
+        isGameOn: false
+    })),
+    on(findCountriesGameActions.reStartGame, (state, action) => ({
+        ...initialState,
+        currentMap: action.payload
+    }))
 )
 

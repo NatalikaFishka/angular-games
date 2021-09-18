@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable, Subscription } from "rxjs";
+import { filter, map, switchMapTo, tap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import { changeCountryToFind, gameFinished } from "../store/actions/find-countries-game.actions";
 
@@ -12,16 +13,14 @@ export class FindCountriesResultService {
     private countryToFind$: Observable<string>;
     private userSelectedPolygon$: Observable<{countryName: string; countryId: string}>;
     private trackResultsSubscription!: Subscription;
-    private regionsToFind$: Observable<number | undefined>;
-    private foundRegions$: Observable<Array<string>>;
+    private countriesLeftToFind$: Observable<Array<string>>;
 
     constructor(
         private store: Store<AppStore>
     ) {
-        this.countryToFind$ = this.store.select(store => store.findCountriesGame.countryToFind)
-        this.userSelectedPolygon$ = this.store.select(store => store.findCountriesGame.userSelection)
-        this.regionsToFind$ = this.store.select(store => store.findCountriesGame.regionsToFind)
-        this.foundRegions$ = this.store.select(store => store.findCountriesGame.foundCountry)
+        this.countryToFind$ = this.store.select(store => store.findCountriesGame.gameOnState.countryToFindNow)
+        this.userSelectedPolygon$ = this.store.select(store => store.findCountriesGame.gameOnState.currentUserSelection)
+        this.countriesLeftToFind$ = this.store.select(store => store.findCountriesGame.gameOnState.countriesLeftToFind)
     }
     
     public trackResults(): void {
@@ -30,15 +29,23 @@ export class FindCountriesResultService {
             this.trackResultsSubscription.unsubscribe()
         }
 
-        this.trackResultsSubscription = combineLatest([this.countryToFind$, this.userSelectedPolygon$, this.regionsToFind$, this.foundRegions$]).subscribe(
-            ([countryToFind, userSelectedPolygon, regionsToFind, foundRegions]) => {
+        this.trackResultsSubscription = combineLatest([this.countryToFind$, this.userSelectedPolygon$, this.countriesLeftToFind$]).pipe(
+            tap(([countryToFind, userSelectedPolygon, countriesLeftToFind]) => {
+                if (userSelectedPolygon.countryName !== "") {
+                    return [countryToFind, userSelectedPolygon, countriesLeftToFind]
+                } else {
+                    return
+                }
+            })
+        ).subscribe(
+            ([countryToFind, userSelectedPolygon, countriesLeftToFind]) => {
 
-                if(regionsToFind === foundRegions.length) {
+                if(!countryToFind) {
                     this.store.dispatch(gameFinished())
                 }
                 
                 console.log("Result: ", countryToFind === userSelectedPolygon.countryName)
-                if(countryToFind === userSelectedPolygon.countryName) {
+                if(countryToFind && countryToFind === userSelectedPolygon.countryName) {
                     // change new country, - done
                     // mark map with other color - done
                     // isGameFinished

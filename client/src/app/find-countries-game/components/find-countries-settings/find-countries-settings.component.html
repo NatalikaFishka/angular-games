@@ -14,5 +14,9 @@
   
       <button type="submit" mat-raised-button color='primary'>Set map</button>
     </form>
-    <button class="start-game-btn" mat-raised-button color='primary' (click)="startGame()" >Start game</button>
+    <button *ngIf="!(isGameOn$ | async); else restart" class="start-game-btn" mat-raised-button color='primary' (click)="startGame()" >Start game</button>
   </mat-card>
+
+  <ng-template #restart>
+    <button class="start-game-btn" mat-raised-button color='primary' (click)="reStartGame()" >Re-start game</button>
+  </ng-template>

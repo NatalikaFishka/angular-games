@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 // import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
@@ -13,34 +13,34 @@ import { Observable } from "rxjs";
     templateUrl: "./map-board.component.html",
     styleUrls: ["./map-board.component.scss"]
 })
-export class MapBoardComponent implements OnInit, AfterViewChecked {
+export class MapBoardComponent implements OnInit {
 
     private polygonTemplate: any;
     private chart!: am4maps.MapChart;
     private polygonSeries!: am4maps.MapPolygonSeries;
-    public mapData: Array<string> = [];
+    public mapData!: Array<string>;
 
-    private foundCountry$: Observable<Array<string>>;
+    private foundCountriesIds$: Observable<Array<string>>;
 
     constructor(
         private store: Store<AppStore>
     ) {
-        this.foundCountry$ = this.store.select(store => store.findCountriesGame.foundCountry)
-    }
-
-    ngAfterViewChecked() {
-        if(!this.mapData.length) {
-            for (let dataSet of this.polygonSeries.data) {
-                this.mapData.push(dataSet.name)
-            }
-            
-            if(this.mapData.length) {
-                this.store.dispatch(setMapCountries({payload: this.mapData}))
-            }
-        }
+        this.foundCountriesIds$ = this.store.select(store => store.findCountriesGame.gameOnState.foundCountriesIds)
     }
 
     ngOnInit() {
+        this.buildMapAndItsComponents();
+        
+        this.foundCountriesIds$.subscribe(
+           
+            (data) => {
+                // console.log("DATA", data);
+                return this.markAsFound(data)
+            }
+        )
+    }  
+    
+    public buildMapAndItsComponents(): void {
         this.createMap();
         this.createPolygonSeries();
         this.setMapDefinition();
@@ -48,12 +48,28 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
         this.setPolygonSeries();
         this.configurePolygonTemplate();
         this.configureHoverState();
-        this.setDefaultMapPosition();   
-        
-        this.foundCountry$.subscribe(
-            (data) => this.markAsFound(data)
-        )
-    }    
+        this.setDefaultMapPosition(); 
+        this.setMapDataToStore();
+    }
+
+    public killMap() {
+        this.chart.dispose();
+    }
+
+    private setMapDataToStore() {
+        this.chart.events.on("ready", () => {
+            this.mapData = [];
+
+            for (let dataSet of this.polygonSeries.data) {
+                if(dataSet.name) {
+                    this.mapData.push(dataSet.name)
+                }
+            }
+
+            this.store.dispatch(setMapCountries({payload: this.mapData}))
+            
+          });
+    }
    
     /**
      *  Create Map
@@ -99,6 +115,7 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
         this.polygonTemplate.fill = am4core.color("#8c97d3");
         this.polygonTemplate.propertyFields.fill = "fill";
         this.polygonTemplate.propertyFields.hoverable = "hoverable";
+        this.polygonTemplate.propertyFields.tooltipText = "tooltipText";
         this.polygonTemplate.events.on("hit", (ev:any) => {
 
             this.store.dispatch(setUserSelectionCountry({payload: ev.target.dataItem.dataContext}))
@@ -168,11 +185,14 @@ export class MapBoardComponent implements OnInit, AfterViewChecked {
                 countriesToFill.push({
                     id: dataId,
                     hoverable: false,
-                    fill: am4core.color("#F05C5C")
+                    fill: am4core.color("#F05C5C"),
+                    tooltipText: ''
                 })
             })
 
             this.polygonSeries.data = countriesToFill;
+        } else {
+            this.polygonSeries.data = [{}]
         }
     }
 }

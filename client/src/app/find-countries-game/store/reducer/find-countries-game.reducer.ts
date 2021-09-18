@@ -5,28 +5,38 @@ export interface FindCountriesGameState {
     loading: boolean;
     currentMap: string;
     mapData: Array<string>;
-    regionsToFind: number | undefined;
-    countryToFind: string;
     isGameOn: boolean;
-    userSelection: {
+    gameOnState: GameOnState
+}
+
+export interface GameOnState {
+    countriesLeftToFind: Array<string>;
+    countryToFindNow: string;
+    isGameFinished: boolean;
+    currentUserSelection: {
         countryName: string;
         countryId: string
     },
-    foundCountry: Array<string>
+    foundCountriesIds: Array<string>
+}
+
+const gameOnInitialSate: GameOnState = {
+    countriesLeftToFind: [],
+    countryToFindNow: "",
+    isGameFinished: false,
+    currentUserSelection: {
+        countryName: '',
+        countryId: ''
+    },
+    foundCountriesIds: []
 }
 
 const initialState: FindCountriesGameState = {
     loading: true,
     currentMap: "",
     mapData: [],
-    regionsToFind: undefined,
-    countryToFind: "",
     isGameOn: false,
-    userSelection: {
-        countryName: '',
-        countryId: ''
-    },
-    foundCountry: []
+    gameOnState: gameOnInitialSate
 }
 
 export const FindCountriesGameReducer = createReducer<any>(
@@ -35,54 +45,68 @@ export const FindCountriesGameReducer = createReducer<any>(
         ...state,
         currentMap: action.payload
     })),
-    on(findCountriesGameActions.setMapCountries, (state, action) => {
-
-        let allCountries = [...action.payload];
-        let countryToFind = allCountries.pop();
-
-        return {
-                ...state,
-                mapData: allCountries,
-                regionsToFind: action.payload.length,
-                countryToFind: countryToFind,
-                loading: false
-        }
-    }),
-    on(findCountriesGameActions.startGame, (state) => ({
+    on(findCountriesGameActions.setMapCountries, (state, action) => ({
         ...state,
-        isGameOn: true
+        mapData: action.payload,
+        loading: false        
     })),
-    on(findCountriesGameActions.setUserSelectionCountry, (state, action) => ({
-        ...state,
-        userSelection: {
-            countryName: action.payload.name,
-            countryId: action.payload.id
-        }
-    })),
-    on(findCountriesGameActions.changeCountryToFind, (state) => {
-
-        let foundCountry = [...state.foundCountry, state.userSelection.countryId];
+    on(findCountriesGameActions.startGame, (state) => {
+        
         let allCountries = [...state.mapData];
         let countryToFind = allCountries.pop();
 
         return {
+        ...state,
+        isGameOn: true,
+        gameOnState: {
+            ...gameOnInitialSate,
+            countriesLeftToFind: allCountries,
+            countryToFindNow: countryToFind
+        }
+    }}),
+    on(findCountriesGameActions.setUserSelectionCountry, (state, action) => ({
+        ...state,
+        gameOnState: {
+            ...state.gameOnState,
+            currentUserSelection: {
+                countryName: action.payload.name,
+                countryId: action.payload.id
+            }
+        }
+    })),
+    on(findCountriesGameActions.changeCountryToFind, (state) => {
+        
+        let foundCountriesIds = [...state.gameOnState.foundCountriesIds, state.gameOnState.currentUserSelection.countryId];
+        let allCountriesLeft = [...state.gameOnState.countriesLeftToFind];
+        let countryToFindNow = allCountriesLeft.pop();
+
+        return {
             ...state,
-            foundCountry: foundCountry,
-            mapData: allCountries,
-            countryToFind: countryToFind,
-            userSelection: {
-                countryName: "",
-                countryId: ""
+            gameOnState: {
+                ...state.gameOnState,
+                foundCountriesIds: foundCountriesIds,
+                countriesLeftToFind: allCountriesLeft,
+                countryToFindNow: countryToFindNow,
+                currentUserSelection: {
+                    countryName: '',
+                    countryId: ''
+                }
             }
         }
     }),
     on(findCountriesGameActions.gameFinished, (state) => ({
         ...state,
-        isGameOn: false
+        // isGameOn: false,
+        // gameOnState: gameOnInitialSate
+        gameOnState: {
+            ...state.gameOnState,
+            isGameFinished: true
+        }
     })),
     on(findCountriesGameActions.reStartGame, (state, action) => ({
         ...initialState,
-        currentMap: action.payload
+        currentMap: action.payload,
+        gameOnState: gameOnInitialSate
     }))
 )
 

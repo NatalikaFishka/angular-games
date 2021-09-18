@@ -3,10 +3,13 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 // import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
 import russiaMap from "@amcharts/amcharts4-geodata/russiaLow";
+import usaMap from "@amcharts/amcharts4-geodata/usaTerritoriesLow";
+// import usaMap from "@amcharts/amcharts4-geodata/usaLow";
 import { AppStore } from "src/app/app-store.model";
 import { Store } from "@ngrx/store";
 import { setMapCountries, setUserSelectionCountry } from "../../store/actions/find-countries-game.actions";
 import { Observable } from "rxjs";
+import { filter, switchMap, take, tap } from "rxjs/operators";
 
 @Component({
     selector: "app-map-board",
@@ -19,25 +22,33 @@ export class MapBoardComponent implements OnInit {
     private chart!: am4maps.MapChart;
     private polygonSeries!: am4maps.MapPolygonSeries;
     public mapData!: Array<string>;
+    private mapToLoad!: string;
 
     private foundCountriesIds$: Observable<Array<string>>;
+    private mapToLoad$: Observable<string>;
 
     constructor(
         private store: Store<AppStore>
     ) {
-        this.foundCountriesIds$ = this.store.select(store => store.findCountriesGame.gameOnState.foundCountriesIds)
+        this.foundCountriesIds$ = this.store.select(store => store.findCountriesGame.gameOnState.foundCountriesIds);
+        this.mapToLoad$ = this.store.select(store => store.findCountriesGame.currentMap);
     }
 
     ngOnInit() {
-        this.buildMapAndItsComponents();
-        
-        this.foundCountriesIds$.subscribe(
-           
-            (data) => {
-                // console.log("DATA", data);
-                return this.markAsFound(data)
-            }
-        )
+
+        this.mapToLoad$.pipe(
+            filter(map => Boolean(map)),
+            tap(map => {
+                
+                if(this.chart) {
+                    this.killMap()
+                }
+
+                this.mapToLoad = map;
+                this.buildMapAndItsComponents();
+            }),
+            switchMap(() => this.foundCountriesIds$)
+        ).subscribe((data) =>  this.markAsFound(data));
     }  
     
     public buildMapAndItsComponents(): void {
@@ -58,6 +69,7 @@ export class MapBoardComponent implements OnInit {
 
     private setMapDataToStore() {
         this.chart.events.on("ready", () => {
+            console.log("Eyyyyyyyyy")
             this.mapData = [];
 
             for (let dataSet of this.polygonSeries.data) {
@@ -89,7 +101,11 @@ export class MapBoardComponent implements OnInit {
      * Sets particular map data (countries, regions, ect.)
      */
     private setMapDefinition(): void {
-        this.chart.geodata = russiaMap;
+        if(this.mapToLoad === "Russia") {
+            this.chart.geodata = russiaMap;     
+        } else if(this.mapToLoad === "USA") {
+            this.chart.geodata = usaMap
+        }       
     }
 
     /**
@@ -122,8 +138,6 @@ export class MapBoardComponent implements OnInit {
             // @ts-ignore: Unreachable code error
             console.log(ev.target.dataItem.dataContext.name);
         });
-
-        // this.polygonTemplate.
     }
 
     /**
@@ -149,8 +163,10 @@ export class MapBoardComponent implements OnInit {
           );
 
         // possibly for Russia only
-        this.chart.deltaLongitude = -140;
-        this.chart.homeZoomLevel = 1.3;
+        if(this.mapToLoad === "Russia") {
+            this.chart.deltaLongitude = -140;
+            this.chart.homeZoomLevel = 1.3;
+        }
     }
 
     /**

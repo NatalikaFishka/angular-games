@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewRef } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Observable, Subscription } from "rxjs";
+import { EMPTY, merge, Observable, partition, Subscription } from "rxjs";
 import { filter, switchMap, take, tap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
@@ -34,28 +34,43 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
     };
 
     ngOnInit(): void {  
-        this.isGameOn$.pipe(
-            filter(isGameOn => isGameOn === true),
-            switchMap(() => this.isGameFinished$)                
-        ).subscribe((isGameFinished) => {
-            if(!isGameFinished) {
-                this.countryToFindSub = this.countryToFind$.pipe(
-                    tap((country) => {
-                        if(country) {
+        
+        const [gameOn$, gameOff$] = partition(this.isGameOn$, value => value === true)
+
+        this.isGameOnSub = merge(
+            gameOn$.pipe(
+                switchMap(() => this.isGameFinished$),
+                tap((isGameFinished) => {
+                    console.log("GameOn and not Finished")
+                    if(!isGameFinished) {
+                        this.countryToFindSub = this.countryToFind$.pipe(
+                            tap((country) => {
+                                if(country) {
+                                    this.snackBar.dismiss();
+                                    this.snackBar.open(`${country}`, undefined, this.barConfig)
+                                }
+                            })
+                        ).subscribe()  
+                    } else {
+                        if(this.countryToFindSub) {
+                            console.log("GameOn and Finished")
                             this.snackBar.dismiss();
-                            this.snackBar.open(`${country}`, undefined, this.barConfig)
+                            this.snackBar.open("Game finished! Congratulation!", undefined, this.barConfig)
+                            this.countryToFindSub.unsubscribe;
                         }
-                    })
-                ).subscribe()  
-            } else {
-                if(this.countryToFindSub) {
-                    this.snackBar.dismiss();
-                    this.snackBar.open("Game finished! Congratulation!", undefined, this.barConfig)
-                    this.countryToFindSub.unsubscribe;
-                }
-            
-        }
-        });      
+                    }
+                })            
+            ),
+            gameOff$.pipe(
+                tap(() => {
+                    console.log("GameOff")
+                    if(this.countryToFindSub) {
+                        this.snackBar.dismiss();
+                        this.countryToFindSub.unsubscribe;
+                    } 
+                })
+            )
+        ).subscribe();   
               
     }
 

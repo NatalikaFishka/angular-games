@@ -12,46 +12,49 @@ export class FindCountriesResultService {
 
     private countryToFind$: Observable<string>;
     private userSelectedPolygon$: Observable<{countryName: string; countryId: string}>;
+    private mapDataCount$: Observable<number>;
+    private foundCountriesIdsCount$: Observable<number>
+
     private trackResultsSubscription!: Subscription;
-    private countriesLeftToFind$: Observable<Array<string>>;
+    private areAllFoundSubscription!: Subscription;
 
     constructor(
         private store: Store<AppStore>
     ) {
         this.countryToFind$ = this.store.select(store => store.findCountriesGame.gameOnState.countryToFindNow)
         this.userSelectedPolygon$ = this.store.select(store => store.findCountriesGame.gameOnState.currentUserSelection)
-        this.countriesLeftToFind$ = this.store.select(store => store.findCountriesGame.gameOnState.countriesLeftToFind)
+        this.mapDataCount$ = this.store.select(store => store.findCountriesGame.mapData.length)
+        this.foundCountriesIdsCount$ = this.store.select(store => store.findCountriesGame.gameOnState.foundCountriesIds.length)
     }
     
     public trackResults(): void {
 
         if(this.trackResultsSubscription) {
-            this.trackResultsSubscription.unsubscribe()
+            this.trackResultsSubscription.unsubscribe();
+            this.areAllFoundSubscription.unsubscribe();
         }
 
-        this.trackResultsSubscription = combineLatest([this.countryToFind$, this.userSelectedPolygon$, this.countriesLeftToFind$]).pipe(
-            tap(([countryToFind, userSelectedPolygon, countriesLeftToFind]) => {
-                if (userSelectedPolygon.countryName !== "") {
-                    return [countryToFind, userSelectedPolygon, countriesLeftToFind]
-                } else {
-                    return
-                }
-            })
-        ).subscribe(
-            ([countryToFind, userSelectedPolygon, countriesLeftToFind]) => {
-
-                if(!countryToFind) {
+        this.areAllFoundSubscription = combineLatest([this.mapDataCount$, this.foundCountriesIdsCount$]).subscribe(
+            ([needToFind, found]) => {
+                if(needToFind && needToFind === found) {
                     this.store.dispatch(gameFinished())
                 }
+            }
+        )
+
+        this.trackResultsSubscription = combineLatest([this.countryToFind$, this.userSelectedPolygon$]).pipe(
+            filter(([countryToFind, userSelectedPolygon]) => {
+                return (countryToFind !== "" && userSelectedPolygon.countryName !== "")
+            })
+        ).subscribe(
+            ([countryToFind, userSelectedPolygon]) => {
                 
                 console.log("Result: ", countryToFind === userSelectedPolygon.countryName)
                 if(countryToFind && countryToFind === userSelectedPolygon.countryName) {
-                    // change new country, - done
-                    // mark map with other color - done
-                    // isGameFinished
-                    // show Correct top snack bar, 
+                    
                     this.store.dispatch(changeCountryToFind());
-
+                    
+                    // show Correct top snack bar??
 
                 } else {
                     // show WRONG top snack bar

@@ -42,7 +42,7 @@ const initialState: FindCountriesGameState = {
 export const FindCountriesGameReducer = createReducer<any>(
     initialState,
     on(findCountriesGameActions.setMapSelection, (state, action) => ({
-        ...state,
+        ...initialState,
         currentMap: action.payload
     })),
     on(findCountriesGameActions.setMapCountries, (state, action) => ({
@@ -96,8 +96,6 @@ export const FindCountriesGameReducer = createReducer<any>(
     }),
     on(findCountriesGameActions.gameFinished, (state) => ({
         ...state,
-        // isGameOn: false,
-        // gameOnState: gameOnInitialSate
         gameOnState: {
             ...state.gameOnState,
             isGameFinished: true

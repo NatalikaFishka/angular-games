@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import { take, tap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import { FindCountriesResultService } from "../../services/find-countries-result.service";
 import * as actions from "../../store/actions/find-countries-game.actions";
@@ -20,6 +21,7 @@ export class FindCountriesSettingsComponent implements OnInit {
     public form: FormGroup;
 
     public isGameOn$!: Observable<boolean>;
+    private currentMap$: Observable<string>;
 
     constructor(
         private fb: FormBuilder,
@@ -28,7 +30,8 @@ export class FindCountriesSettingsComponent implements OnInit {
     ) {
         this.form = this.fb.group({
             selectedMap: [this.initialMap]
-        })
+        });
+        this.currentMap$ = this.store.select(store => store.findCountriesGame.currentMap);
     }
     ngOnInit() {
         this.store.dispatch(actions.setMapSelection({payload: this.form.value.selectedMap}));
@@ -37,6 +40,14 @@ export class FindCountriesSettingsComponent implements OnInit {
 
     formSubmit() {
         console.log('FORM DATA', this.form.value)
+        this.currentMap$.pipe(
+            tap((currentMap) => {
+                if(currentMap !== this.form.value.selectedMap) {
+                    this.store.dispatch(actions.setMapSelection({payload: this.form.value.selectedMap}));
+                }
+            }),
+            take(1)
+        ).subscribe();
     }
 
     startGame() {

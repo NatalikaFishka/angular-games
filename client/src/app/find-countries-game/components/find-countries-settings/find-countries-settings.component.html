@@ -12,7 +12,7 @@
         </mat-select>
       </mat-form-field>
   
-      <button type="submit" mat-raised-button color='primary'>Set map</button>
+      <button type="submit" mat-raised-button color='primary' >Set map</button>
     </form>
     <button *ngIf="!(isGameOn$ | async); else restart" class="start-game-btn" mat-raised-button color='primary' (click)="startGame()" >Start game</button>
   </mat-card>

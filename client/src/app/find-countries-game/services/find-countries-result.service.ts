@@ -49,7 +49,6 @@ export class FindCountriesResultService {
         ).subscribe(
             ([countryToFind, userSelectedPolygon]) => {
                 
-                console.log("Result: ", countryToFind === userSelectedPolygon.countryName)
                 if(countryToFind && countryToFind === userSelectedPolygon.countryName) {
                     
                     this.store.dispatch(changeCountryToFind());

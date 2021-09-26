@@ -7,8 +7,9 @@ import { AppStore } from "src/app/app-store.model";
 import { FindCountriesResultService } from "../../services/find-countries-result.service";
 import * as actions from "../../store/actions/find-countries-game.actions";
 
+import { Map, MAPS } from "../../configs/map.config";
 
-const MapsToSelect = ["Russia", "USA"]
+
 @Component({
     selector: "app-find-countries-settings",
     templateUrl: "./find-countries-settings.component.html",
@@ -16,8 +17,8 @@ const MapsToSelect = ["Russia", "USA"]
 })
 export class FindCountriesSettingsComponent implements OnInit {
 
-    private initialMap: string = "Russia";
-    public mapsToSelect: Array<string> = MapsToSelect;
+    public mapsToSelect: Array<Map> = MAPS;
+    private initialMap: string = MAPS[0].name;
     public form: FormGroup;
 
     public isGameOn$!: Observable<boolean>;
@@ -39,7 +40,7 @@ export class FindCountriesSettingsComponent implements OnInit {
     }
 
     formSubmit() {
-        console.log('FORM DATA', this.form.value)
+        
         this.currentMap$.pipe(
             tap((currentMap) => {
                 if(currentMap !== this.form.value.selectedMap) {

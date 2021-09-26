@@ -6,8 +6,8 @@
       <mat-form-field appearance='outline'>
         <mat-label>Map to display</mat-label>
         <mat-select formControlName='selectedMap'>
-          <mat-option *ngFor="let map of mapsToSelect" [value]="map">
-            {{map}}
+          <mat-option *ngFor="let map of mapsToSelect" [value]="map.name">
+            {{map.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>

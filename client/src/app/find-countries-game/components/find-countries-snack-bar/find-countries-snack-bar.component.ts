@@ -1,7 +1,7 @@
-import { Component, Input, OnDestroy, OnInit, ViewRef } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { EMPTY, merge, Observable, partition, Subscription } from "rxjs";
-import { filter, switchMap, take, tap } from "rxjs/operators";
+import { merge, Observable, partition, Subscription } from "rxjs";
+import { switchMap, tap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material/snack-bar';
 
@@ -41,7 +41,6 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
             gameOn$.pipe(
                 switchMap(() => this.isGameFinished$),
                 tap((isGameFinished) => {
-                    console.log("GameOn and not Finished")
                     if(!isGameFinished) {
                         this.countryToFindSub = this.countryToFind$.pipe(
                             tap((country) => {
@@ -53,7 +52,6 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
                         ).subscribe()  
                     } else {
                         if(this.countryToFindSub) {
-                            console.log("GameOn and Finished")
                             this.snackBar.dismiss();
                             this.snackBar.open("Game finished! Congratulation!", undefined, this.barConfig)
                             this.countryToFindSub.unsubscribe;
@@ -63,7 +61,6 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
             ),
             gameOff$.pipe(
                 tap(() => {
-                    console.log("GameOff")
                     if(this.countryToFindSub) {
                         this.snackBar.dismiss();
                         this.countryToFindSub.unsubscribe;

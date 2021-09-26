@@ -1,15 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
-// import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
-import russiaMap from "@amcharts/amcharts4-geodata/russiaLow";
-import usaMap from "@amcharts/amcharts4-geodata/usaTerritoriesLow";
-// import usaMap from "@amcharts/amcharts4-geodata/usaLow";
 import { AppStore } from "src/app/app-store.model";
 import { Store } from "@ngrx/store";
 import { setMapCountries, setUserSelectionCountry } from "../../store/actions/find-countries-game.actions";
 import { Observable } from "rxjs";
-import { filter, switchMap, take, tap } from "rxjs/operators";
+import { filter, switchMap, tap } from "rxjs/operators";
+import { Map, MAPS } from "../../configs/map.config";
 
 @Component({
     selector: "app-map-board",
@@ -23,6 +20,7 @@ export class MapBoardComponent implements OnInit {
     private polygonSeries!: am4maps.MapPolygonSeries;
     public mapData!: Array<string>;
     private mapToLoad!: string;
+    private mapConfig: Map | undefined;
 
     private foundCountriesIds$: Observable<Array<string>>;
     private mapToLoad$: Observable<string>;
@@ -45,6 +43,7 @@ export class MapBoardComponent implements OnInit {
                 }
 
                 this.mapToLoad = map;
+                this.mapConfig = MAPS.find((mapConfig) => mapConfig.name === this.mapToLoad);
                 this.buildMapAndItsComponents();
             }),
             switchMap(() => this.foundCountriesIds$)
@@ -69,7 +68,7 @@ export class MapBoardComponent implements OnInit {
 
     private setMapDataToStore() {
         this.chart.events.on("ready", () => {
-            console.log("Eyyyyyyyyy")
+            
             this.mapData = [];
 
             for (let dataSet of this.polygonSeries.data) {
@@ -95,24 +94,37 @@ export class MapBoardComponent implements OnInit {
      */
     private createPolygonSeries(): void {
         this.polygonSeries = this.chart.series.push(new am4maps.MapPolygonSeries());
+
+        if(this.mapConfig?.include) {
+            this.polygonSeries.include = this.mapConfig.include;
+        }
+        if(this.mapConfig?.exclude) {
+            this.polygonSeries.exclude = this.mapConfig.exclude;
+        }
     }
 
     /**
      * Sets particular map data (countries, regions, ect.)
      */
     private setMapDefinition(): void {
-        if(this.mapToLoad === "Russia") {
-            this.chart.geodata = russiaMap;     
-        } else if(this.mapToLoad === "USA") {
-            this.chart.geodata = usaMap
-        }       
+
+        if(this.mapConfig) {
+            this.chart.geodata = this.mapConfig.mapData;   
+        } else {
+            this.mapToLoad = MAPS[0].name
+            this.chart.geodata = MAPS[0].mapData;    
+        }     
     }
 
     /**
      * Sets map projection
      */
     private setMapProjection(): void {
-        this.chart.projection = new am4maps.projections.Mercator();
+        if(this.mapConfig?.projection) {
+            this.chart.projection = this.mapConfig.projection;
+        } else {
+            this.chart.projection = new am4maps.projections.Miller();
+        }
     }
 
     /**
@@ -135,8 +147,6 @@ export class MapBoardComponent implements OnInit {
         this.polygonTemplate.events.on("hit", (ev:any) => {
 
             this.store.dispatch(setUserSelectionCountry({payload: ev.target.dataItem.dataContext}))
-            // @ts-ignore: Unreachable code error
-            console.log(ev.target.dataItem.dataContext.name);
         });
     }
 
@@ -153,20 +163,22 @@ export class MapBoardComponent implements OnInit {
      */
     private setDefaultMapPosition() {
 
-        this.chart.zoomToRectangle(
-            this.chart.north,
-            this.chart.east,
-            this.chart.south,
-            this.chart.west,
-            1,
-            true
-          );
-
-        // possibly for Russia only
-        if(this.mapToLoad === "Russia") {
-            this.chart.deltaLongitude = -140;
-            this.chart.homeZoomLevel = 1.3;
+        if(this.mapConfig?.homeGeoPoint) {
+            this.chart.homeGeoPoint = this.mapConfig.homeGeoPoint
         }
+
+        if(this.mapConfig?.deltaLongitude) {
+            this.chart.deltaLongitude = this.mapConfig.deltaLongitude
+        }
+
+        if(this.mapConfig?.deltaLatitude) {
+            this.chart.deltaLatitude = this.mapConfig.deltaLatitude
+        }
+
+        if(this.mapConfig?.homeZoomLevel) {
+            this.chart.homeZoomLevel = this.mapConfig.homeZoomLevel
+        }
+
     }
 
     /**

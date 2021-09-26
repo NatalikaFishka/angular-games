@@ -52,7 +52,7 @@ export const FindCountriesGameReducer = createReducer<any>(
     })),
     on(findCountriesGameActions.startGame, (state) => {
         
-        let allCountries = [...state.mapData];
+        let allCountries = [...state.mapData].sort(() => 0.5 - Math.random());
         let countryToFind = allCountries.pop();
 
         return {

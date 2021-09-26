@@ -53,7 +53,7 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
                     } else {
                         if(this.countryToFindSub) {
                             this.snackBar.dismiss();
-                            this.snackBar.open("Game finished! Congratulation!", undefined, this.barConfig)
+                            this.snackBar.open("Game finished! Congratulations!", undefined, this.barConfig)
                             this.countryToFindSub.unsubscribe;
                         }
                     }

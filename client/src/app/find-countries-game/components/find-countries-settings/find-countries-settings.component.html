@@ -15,6 +15,11 @@
       <button type="submit" mat-raised-button color='primary' >Set map</button>
     </form>
     <button *ngIf="!(isGameOn$ | async); else restart" class="start-game-btn" mat-raised-button color='primary' (click)="startGame()" >Start game</button>
+    <mat-checkbox
+      class="use_hint"
+      color="primary"
+      (change)="showHintTooltip.emit($event.checked)"
+    >Show tooltip on hover</mat-checkbox>
   </mat-card>
 
   <ng-template #restart>

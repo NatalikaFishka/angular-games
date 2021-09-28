@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
@@ -23,6 +23,8 @@ export class FindCountriesSettingsComponent implements OnInit {
 
     public isGameOn$!: Observable<boolean>;
     private currentMap$: Observable<string>;
+
+    @Output() showHintTooltip: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private fb: FormBuilder,

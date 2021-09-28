@@ -1,6 +1,6 @@
 <div class='main' [ngClass]='isScreenWide ? "wide": "narrow"'>
-    <app-map-board></app-map-board>
+    <app-map-board [showHintTooltip]="showHintTooltip"></app-map-board>
     <app-find-countries-results></app-find-countries-results>
-    <app-find-countries-settings></app-find-countries-settings>
+    <app-find-countries-settings (showHintTooltip)="showHintTooltip = $event"></app-find-countries-settings>
     <app-find-countries-snack-bar></app-find-countries-snack-bar>
 </div>

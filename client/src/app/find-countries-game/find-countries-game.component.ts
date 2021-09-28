@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 export class FindCountriesGameComponent implements OnInit {
 
   public isScreenWide!: boolean;
+  public showHintTooltip!: boolean;
 
   ngOnInit(): void {
     const screenWidth = window.innerWidth;

@@ -7,6 +7,7 @@ import { MapBoardComponent } from './components/map-board/map-board.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { MatCardModule } from '@angular/material/card';
@@ -29,6 +30,7 @@ import { FindCountriesSnackBarComponent } from './components/find-countries-snac
     BrowserAnimationsModule,
     MatButtonModule,
     MatSelectModule,
+    MatCheckboxModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import { AppStore } from "src/app/app-store.model";
@@ -14,6 +14,8 @@ import { Map, MAPS } from "../../configs/map.config";
     styleUrls: ["./map-board.component.scss"]
 })
 export class MapBoardComponent implements OnInit {
+
+    @Input() showHintTooltip: boolean = false;
 
     private polygonTemplate: any;
     private chart!: am4maps.MapChart;
@@ -60,6 +62,7 @@ export class MapBoardComponent implements OnInit {
         this.configureHoverState();
         this.setDefaultMapPosition(); 
         this.setMapDataToStore();
+        this.setTooltipBehaviour();
     }
 
     public killMap() {
@@ -144,12 +147,13 @@ export class MapBoardComponent implements OnInit {
         this.polygonTemplate.propertyFields.fill = "fill";
         this.polygonTemplate.propertyFields.hoverable = "hoverable";
         this.polygonTemplate.propertyFields.tooltipText = "tooltipText";
-        this.polygonTemplate.events.on("hit", (ev:any) => {
 
+        this.polygonTemplate.events.on("hit", (ev:any) => {
+            
             this.store.dispatch(setUserSelectionCountry({payload: ev.target.dataItem.dataContext}))
         });
     }
-
+    
     /**
      * Configure hover state
      */
@@ -179,6 +183,21 @@ export class MapBoardComponent implements OnInit {
             this.chart.homeZoomLevel = this.mapConfig.homeZoomLevel
         }
 
+    }
+
+    /**
+     * Add tooltip show/hide on condition
+     */
+    private setTooltipBehaviour() {
+
+        this.polygonSeries.tooltip?.label.adapter.add("text", (text) => {
+            if (this.showHintTooltip) {
+              return text;
+            }
+            else {
+              return "";
+            }
+          });
     }
 
     /**

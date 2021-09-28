@@ -6,6 +6,7 @@ export const setMapSelection = createAction('[FIND COUNTRIES GAME] Set Map Selec
 
 export const startGame = createAction('[FIND COUNTRIES GAME] Game Started');
 export const reStartGame = createAction('[FIND COUNTRIES GAME] Game Restart', props<{payload: string}>());
+export const skip = createAction('[FIND COUNTRIES GAME] Skip Current Country');
 export const gameFinished = createAction('[FIND COUNTRIES GAME] Game Finished');
 
 export const setUserSelectionCountry = createAction('[FIND COUNTRIES GAME] Set User Selection Country', props<{ payload: any}>());

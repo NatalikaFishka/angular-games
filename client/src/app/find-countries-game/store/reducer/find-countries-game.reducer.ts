@@ -105,6 +105,20 @@ export const FindCountriesGameReducer = createReducer<any>(
         ...initialState,
         currentMap: action.payload,
         gameOnState: gameOnInitialSate
-    }))
+    })),
+    on(findCountriesGameActions.skip, (state) => {
+
+        const countriesLeftToFind = [state.gameOnState.countryToFindNow, ...state.gameOnState.countriesLeftToFind].sort(() => 0.5 - Math.random());
+        const countryToFindNow = countriesLeftToFind.pop();
+
+        return {
+            ...state,
+            gameOnState: {
+                ...state.gameOnState,
+                countriesLeftToFind: countriesLeftToFind,
+                countryToFindNow: countryToFindNow
+            }
+        }
+    })
 )
 

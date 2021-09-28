@@ -14,7 +14,10 @@
   
       <button type="submit" mat-raised-button color='primary' >Set map</button>
     </form>
-    <button *ngIf="!(isGameOn$ | async); else restart" class="start-game-btn" mat-raised-button color='primary' (click)="startGame()" >Start game</button>
+    <div *ngIf="!(isGameOn$ | async); else restart" class="start-game-btns" >
+      <button  mat-raised-button color='primary' (click)="startGame()" >Start game</button>
+      <button mat-raised-button color='primary' disabled >--</button>
+    </div>
     <mat-checkbox
       class="use_hint"
       color="primary"
@@ -23,5 +26,8 @@
   </mat-card>
 
   <ng-template #restart>
-    <button class="start-game-btn" mat-raised-button color='primary' (click)="reStartGame()" >Re-start game</button>
+    <div class="start-game-btns" >      
+      <button mat-raised-button color='primary' (click)="reStartGame()" >Re-start game</button>
+      <button mat-raised-button color='primary' (click)="skip()" >Skip</button>
+    </div>
   </ng-template>

@@ -61,4 +61,8 @@ export class FindCountriesSettingsComponent implements OnInit {
     reStartGame() {
         this.store.dispatch(actions.startGame())
     }
+
+    skip() {
+        this.store.dispatch(actions.skip())
+    }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable, Subscription } from "rxjs";
-import { filter, map, switchMapTo, tap } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
 import { changeCountryToFind, gameFinished } from "../store/actions/find-countries-game.actions";
 

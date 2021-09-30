@@ -12,6 +12,7 @@ export interface FindCountriesGameState {
 export interface GameOnState {
     countriesLeftToFind: Array<string>;
     countryToFindNow: string;
+    gameStartedAt: number | undefined;
     isGameFinished: boolean;
     currentUserSelection: {
         countryName: string;
@@ -23,6 +24,7 @@ export interface GameOnState {
 const gameOnInitialSate: GameOnState = {
     countriesLeftToFind: [],
     countryToFindNow: "",
+    gameStartedAt: undefined,
     isGameFinished: false,
     currentUserSelection: {
         countryName: '',
@@ -61,7 +63,8 @@ export const FindCountriesGameReducer = createReducer<any>(
         gameOnState: {
             ...gameOnInitialSate,
             countriesLeftToFind: allCountries,
-            countryToFindNow: countryToFind
+            countryToFindNow: countryToFind,
+            gameStartedAt: Date.now()
         }
     }}),
     on(findCountriesGameActions.setUserSelectionCountry, (state, action) => ({
@@ -104,7 +107,8 @@ export const FindCountriesGameReducer = createReducer<any>(
     on(findCountriesGameActions.reStartGame, (state, action) => ({
         ...initialState,
         currentMap: action.payload,
-        gameOnState: gameOnInitialSate
+        gameOnState: gameOnInitialSate,
+        gameStartedAt: Date.now()
     })),
     on(findCountriesGameActions.skip, (state) => {
 

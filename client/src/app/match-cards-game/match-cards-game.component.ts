@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { GameResultService } from './services/game-result.service';
 
 @Component({
-  selector: 'app-game-page',
-  templateUrl: './game-page.component.html',
-  styleUrls: ['./game-page.component.scss']
+  selector: 'app-match-cards-game',
+  templateUrl: './match-cards-game.component.html',
+  styleUrls: ['./match-cards-game.component.scss']
 })
-export class GamePageComponent implements OnInit{
+export class MatchCardsGameComponent implements OnInit{
 
   isScreenWide!: boolean;
 

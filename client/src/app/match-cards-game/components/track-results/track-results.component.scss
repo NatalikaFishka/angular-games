@@ -1,0 +1,14 @@
+:host {
+    min-width: 15rem;
+}
+
+.time-set {
+    display: grid;
+    justify-items: center;
+    row-gap: 1rem;
+    margin: 1rem;
+
+    .time {
+        font-size: 2rem;
+    }
+}

@@ -12,3 +12,5 @@ export const gameFinished = createAction('[FIND COUNTRIES GAME] Game Finished');
 export const setUserSelectionCountry = createAction('[FIND COUNTRIES GAME] Set User Selection Country', props<{ payload: any}>());
 
 export const changeCountryToFind = createAction('[FIND COUNTRIES GAME] Change Country To Find');
+
+export const cleanStore = createAction('[FIND COUNTRIES GAME] Clean Store State')

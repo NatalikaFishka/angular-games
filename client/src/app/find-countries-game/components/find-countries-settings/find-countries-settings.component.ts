@@ -1,10 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { take, tap } from "rxjs/operators";
 import { AppStore } from "src/app/app-store.model";
-import { FindCountriesResultService } from "../../services/find-countries-result.service";
 import * as actions from "../../store/actions/find-countries-game.actions";
 
 import { Map, MAPS } from "../../configs/map.config";
@@ -21,28 +20,26 @@ export class FindCountriesSettingsComponent implements OnInit {
     private initialMap: string = MAPS[0].name;
     public form: FormGroup;
 
-    public isGameOn$!: Observable<boolean>;
     private currentMap$: Observable<string>;
-
-    @Output() showHintTooltip: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(
         private fb: FormBuilder,
         private store: Store<AppStore>,
-        private resultService: FindCountriesResultService,
     ) {
         this.form = this.fb.group({
-            selectedMap: [this.initialMap]
+            selectedMap: [undefined]
         });
         this.currentMap$ = this.store.select(store => store.findCountriesGame.currentMap);
     }
     ngOnInit() {
-        this.store.dispatch(actions.setMapSelection({payload: this.form.value.selectedMap}));
-        this.isGameOn$ = this.store.select(store => store.findCountriesGame.isGameOn);
+        this.currentMap$.pipe(
+            take(1)
+        ).subscribe(map => this.initialMap = map);
+
+        this.form.setValue({selectedMap: this.initialMap});
     }
 
-    formSubmit() {
-        
+    formSubmit() {        
         this.currentMap$.pipe(
             tap((currentMap) => {
                 if(currentMap !== this.form.value.selectedMap) {
@@ -51,18 +48,5 @@ export class FindCountriesSettingsComponent implements OnInit {
             }),
             take(1)
         ).subscribe();
-    }
-
-    startGame() {
-        this.store.dispatch(actions.startGame());
-        this.resultService.trackResults();
-    }
-
-    reStartGame() {
-        this.store.dispatch(actions.startGame())
-    }
-
-    skip() {
-        this.store.dispatch(actions.skip())
     }
 }

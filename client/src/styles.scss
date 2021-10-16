@@ -6,10 +6,25 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .find-countries-snack-bar {
     font-weight: 500;
     color: white;
-    background-color: #3f51b5;
+    background-color: #3f51b5;    
     
     .mat-simple-snackbar {
         display: block;
         text-align: center;
     }
+
 }
+
+@media screen and (max-width: 900px) {
+    .mat-snack-bar-container {
+        position: absolute;
+        bottom: 50px;
+        left: 0;
+        width: calc(100% - 2 * 8px) !important;
+    }
+
+    .footer-settings-dialog mat-dialog-container {
+        padding: 0;
+    }
+}
+

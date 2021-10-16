@@ -14,6 +14,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FindCountriesSnackBarComponent } from './components/find-countries-snack-bar/find-countries-snack-bar.component';
+import { GameControlsComponent } from './components/game-controls/game-controls.component';
+import { MobileFooterComponent } from './components/mobile-footer/mobile-footer.component';
 
 
 
@@ -23,7 +25,9 @@ import { FindCountriesSnackBarComponent } from './components/find-countries-snac
     MapBoardComponent,
     FindCountriesResultComponent,
     FindCountriesSettingsComponent,
-    FindCountriesSnackBarComponent
+    FindCountriesSnackBarComponent,
+    GameControlsComponent,
+    MobileFooterComponent
   ],
   imports: [
     CommonModule,

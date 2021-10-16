@@ -7,7 +7,7 @@ const CardMemoryGame: Game = {
 }
 
 const CountriesGame: Game = {
-    name: "Find countries on map", 
+    name: "Find countries", 
     image: 'https://res.cloudinary.com/dkqohzqus/image/upload/v1633033143/AngularGames/find_country_home_a5cnlj.png',
     path: 'find-countries-game'
 }

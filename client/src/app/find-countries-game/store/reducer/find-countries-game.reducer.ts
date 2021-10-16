@@ -1,4 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
+import { MAPS } from "../../configs/map.config";
 import * as findCountriesGameActions from '../actions/find-countries-game.actions'
 
 export interface FindCountriesGameState {
@@ -35,7 +36,7 @@ const gameOnInitialSate: GameOnState = {
 
 const initialState: FindCountriesGameState = {
     loading: true,
-    currentMap: "",
+    currentMap: MAPS[0].name,
     mapData: [],
     isGameOn: false,
     gameOnState: gameOnInitialSate
@@ -123,6 +124,9 @@ export const FindCountriesGameReducer = createReducer<any>(
                 countryToFindNow: countryToFindNow
             }
         }
-    })
+    }),
+    on(findCountriesGameActions.cleanStore, () => ({
+        ...initialState
+    }))
 )
 

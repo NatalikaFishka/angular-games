@@ -46,7 +46,7 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
                             tap((country) => {
                                 if(country) {
                                     this.snackBar.dismiss();
-                                    this.snackBar.open(`${country}`, undefined, this.barConfig)
+                                    this.snackBar.open(`${country}`, undefined, this.barConfig);
                                 }
                             })
                         ).subscribe()  
@@ -66,13 +66,14 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
                         this.countryToFindSub.unsubscribe;
                     } 
                 })
-            )
-        ).subscribe();   
-              
-    }
-
+                )
+                ).subscribe();   
+                
+            }
+            
     ngOnDestroy(): void {
         if(this.isGameOnSub) {
+            this.snackBar.dismiss();
             this.isGameOnSub.unsubscribe();
         }
     }

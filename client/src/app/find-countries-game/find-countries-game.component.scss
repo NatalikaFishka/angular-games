@@ -4,20 +4,11 @@
     align-items: center;
     overflow: hidden;
     position: relative;
-    
-    &.wide {
-        grid-template-columns: 75% 25%; 
-        grid-template-areas: "board track-results"
-                                "board tool-settings";
 
-    }
-
-    &.narrow {
-        grid-template-columns: 100%; 
-        grid-template-areas: "board" 
-                            "track-results"
-                            "tool-settings";
-    }
+    grid-template-columns: 75% 25%; 
+    grid-template-areas: "board track-results"
+                            "board game-controls"
+                            "board tool-settings";
 
     app-map-board {
         grid-area: board;
@@ -33,8 +24,45 @@
         grid-area: tool-settings;
         position: absolute;
     }
+    
+    app-game-controls {
+        grid-area: game-controls;
+        position: absolute;
+    }
 
     app-find-countries-snack-bar {
         grid-area: board;
     }
 }
+
+@media screen and (max-width: 900px) {
+    .main {
+        grid-template-columns: 1fr;
+        grid-template-areas: "board"
+                            "footer";
+        overflow: scroll;
+        justify-items: normal;
+
+        app-map-board {
+            height: calc(100vh - 56px - 50px);
+        }    
+
+        app-find-countries-results {
+            grid-area: board;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        app-mobile-footer {
+            grid-area: footer;
+            background-color: #3f51b5;
+            height: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            justify-items: center;
+        }
+    }
+  }
+

@@ -1,0 +1,31 @@
+
+.content {
+    display: grid;
+    justify-items: center;
+    margin: 1rem;
+
+    .use_hint {
+        padding: 1rem;
+    }
+    
+    .start-game-btns {
+        width: calc(100% - 2rem);
+        display: flex;
+        flex-direction: column;
+
+        button {
+            margin: 0.5rem 0;
+        }
+    }
+}
+
+.start-game-btns-mobile {
+
+    display: flex;
+
+}
+
+mat-icon {
+    color: white;
+    display: block;
+}

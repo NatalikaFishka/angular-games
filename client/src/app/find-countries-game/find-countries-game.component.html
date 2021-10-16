@@ -1,6 +1,11 @@
-<div class='main' [ngClass]='isScreenWide ? "wide": "narrow"'>
+<div class='main'>
     <app-map-board [showHintTooltip]="showHintTooltip"></app-map-board>
     <app-find-countries-results></app-find-countries-results>
-    <app-find-countries-settings (showHintTooltip)="showHintTooltip = $event"></app-find-countries-settings>
+    <app-find-countries-settings *ngIf="!isSmallScreen; else mobile"></app-find-countries-settings>
+    <app-game-controls *ngIf="!isSmallScreen" (showHintTooltip)="showHintTooltip = $event"></app-game-controls>
     <app-find-countries-snack-bar></app-find-countries-snack-bar>
 </div>
+
+<ng-template #mobile>
+        <app-mobile-footer></app-mobile-footer>
+</ng-template>

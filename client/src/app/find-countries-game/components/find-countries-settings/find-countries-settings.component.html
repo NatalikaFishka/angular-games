@@ -1,33 +1,17 @@
 <mat-card class="content">
-    <mat-card-header>
-      <mat-card-title>Game Settings</mat-card-title>
-    </mat-card-header>
-    <form [formGroup]='form' (submit)="formSubmit()">
-      <mat-form-field appearance='outline'>
-        <mat-label>Map to display</mat-label>
-        <mat-select formControlName='selectedMap'>
-          <mat-option *ngFor="let map of mapsToSelect" [value]="map.name">
-            {{map.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <button type="submit" mat-raised-button color='primary' >Set map</button>
-    </form>
-    <div *ngIf="!(isGameOn$ | async); else restart" class="start-game-btns" >
-      <button  mat-raised-button color='primary' (click)="startGame()" >Start game</button>
-      <button mat-raised-button color='primary' disabled >--</button>
-    </div>
-    <mat-checkbox
-      class="use_hint"
-      color="primary"
-      (change)="showHintTooltip.emit($event.checked)"
-    >Show tooltip on hover</mat-checkbox>
-  </mat-card>
+  <mat-card-header>
+    <mat-card-title>Map Setting</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]='form' (submit)="formSubmit()">
+    <mat-form-field appearance='outline'>
+      <mat-label>Map to display</mat-label>
+      <mat-select formControlName='selectedMap'>
+        <mat-option *ngFor="let map of mapsToSelect" [value]="map.name">
+          {{map.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <ng-template #restart>
-    <div class="start-game-btns" >      
-      <button mat-raised-button color='primary' (click)="reStartGame()" >Re-start game</button>
-      <button mat-raised-button color='primary' (click)="skip()" >Skip</button>
-    </div>
-  </ng-template>
+    <button type="submit" mat-raised-button color='primary' >Set map</button>
+  </form>
+</mat-card>

@@ -8,18 +8,15 @@
         display: grid;
         padding: 1rem;
     }
+}
 
-    .use_hint {
-        padding: 1rem;
-    }
-    
-    .start-game-btns {
-        width: calc(100% - 2rem);
-        display: flex;
-        flex-direction: column;
+mat-icon {
+    color: white;
+    display: block;
+}
 
-        button {
-            margin: 0.5rem 0;
-        }
+@media screen and (max-width: 900px) {
+    .content {
+        margin: 0;
     }
 }

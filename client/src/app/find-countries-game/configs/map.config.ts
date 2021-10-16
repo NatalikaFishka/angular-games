@@ -22,10 +22,11 @@ export interface Map {
 const WORLD: Map = {
     name: "World",
     mapData: worldMap,
-    homeGeoPoint: {
-        longitude: 50,
-        latitude: 0
-    },
+    exclude: ['AQ'],
+    // homeGeoPoint: {
+    //     longitude: 50,
+    //     latitude: 0
+    // },
     deltaLongitude: -10
 }
 
@@ -33,8 +34,8 @@ const RUSSIA: Map = {
     name: "Russia",
     mapData:  russiaMap,
     projection: new am4maps.projections.Mercator(),
-    deltaLongitude: -140,
-    homeZoomLevel: 1.3
+    deltaLongitude: -120,
+    homeZoomLevel: 1.5
 };
 
 const USA: Map = {
@@ -101,12 +102,12 @@ const NORTH_AMERICA: Map = {
     'PM']
 }
 
-const ANTARCTICA: Map = {
-    name: "Antarctica",
-    mapData: worldMap,
-    include: ['AQ'],
-    deltaLatitude: 90
-}
+// const ANTARCTICA: Map = {
+//     name: "Antarctica",
+//     mapData: worldMap,
+//     include: ['AQ'],
+//     deltaLatitude: 90
+// }
 
 export const MAPS: Array<Map> = [
     WORLD,
@@ -116,7 +117,7 @@ export const MAPS: Array<Map> = [
     AFRICA,
     ASIA,
     AUSTRALIA,
-    ANTARCTICA,
+    // ANTARCTICA,
     RUSSIA,
     USA,
 ]

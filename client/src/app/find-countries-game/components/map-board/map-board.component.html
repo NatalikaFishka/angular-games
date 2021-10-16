@@ -1,8 +1,12 @@
 <div id="chartdiv"></div>
 <div class="chart-handlers">
-    <button mat-mini-fab color="primary" (click)="zoomIn()">+</button>
-    <button mat-mini-fab color="primary" (click)="zoomOut()">-</button>
+    <button mat-mini-fab color="primary" (click)="zoomIn()">
+        <mat-icon>zoom_in</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" (click)="zoomOut()">
+        <mat-icon>zoom_out</mat-icon>
+    </button>
     <button mat-mini-fab color="primary"(click)="resetMapSize()">
-        <mat-icon>refresh</mat-icon>
+        <mat-icon>filter_center_focus</mat-icon>
     </button>
 </div>

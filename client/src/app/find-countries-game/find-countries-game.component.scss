@@ -1,4 +1,5 @@
 .main {
+    height: 100%;
     display: grid;
     justify-items: center;
     align-items: center;
@@ -13,7 +14,7 @@
     app-map-board {
         grid-area: board;
         width: 100%;
-        height: calc(100vh - 64px);
+        height: 100%;
     }
 
     app-find-countries-results {
@@ -38,14 +39,11 @@
 @media screen and (max-width: 900px) {
     .main {
         grid-template-columns: 1fr;
+        grid-template-rows: 1fr min-content;
         grid-template-areas: "board"
                             "footer";
         overflow: scroll;
-        justify-items: normal;
-
-        app-map-board {
-            height: calc(100vh - 56px - 50px);
-        }    
+        justify-items: normal; 
 
         app-find-countries-results {
             grid-area: board;

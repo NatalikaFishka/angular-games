@@ -36,7 +36,7 @@ const gameOnInitialSate: GameOnState = {
 
 const initialState: FindCountriesGameState = {
     loading: true,
-    currentMap: MAPS[0].name,
+    currentMap: MAPS[8].name,
     mapData: [],
     isGameOn: false,
     gameOnState: gameOnInitialSate

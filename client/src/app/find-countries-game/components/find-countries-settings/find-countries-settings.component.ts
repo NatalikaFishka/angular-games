@@ -17,7 +17,7 @@ import { Map, MAPS } from "../../configs/map.config";
 export class FindCountriesSettingsComponent implements OnInit {
 
     public mapsToSelect: Array<Map> = MAPS;
-    private initialMap: string = MAPS[0].name;
+    private initialMap!: string;
     public form: FormGroup;
 
     private currentMap$: Observable<string>;

@@ -1,2 +1,5 @@
-<mat-icon (click)="openDialog()">settings_suggest</mat-icon>
-<app-game-controls [isMobile]="true" class="mobile"></app-game-controls>
+<div class="settings-btn" (click)="openDialog()">
+    <mat-icon >settings_suggest</mat-icon>
+    <span>Settings</span>
+</div>
+<app-game-controls [isMobile]="true"></app-game-controls>

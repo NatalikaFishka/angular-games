@@ -3,8 +3,8 @@
       <mat-card-title>Game Controls</mat-card-title>
     </mat-card-header>
     <div *ngIf="!(isGameOn$ | async); else restart" class="start-game-btns" >
-      <button  mat-raised-button color='primary' (click)="startGame()" >Start game</button>
-      <button mat-raised-button color='primary' disabled >--</button>
+      <button  mat-raised-button color='primary' class="start-btn" (click)="startGame()" >Start game</button>
+      <!-- <button mat-raised-button color='primary' disabled >--</button> -->
     </div>
     <mat-checkbox
       class="use_hint"
@@ -16,20 +16,27 @@
 
   <ng-template #restart>
     <div class="start-game-btns" >      
-      <button mat-raised-button color='primary' (click)="reStartGame()" >Re-start game</button>
-      <button mat-raised-button color='primary' (click)="skip()" >Skip</button>
+      <button mat-raised-button color='primary' class="restart-btn" (click)="reStartGame()" >Restart</button>
+      <button mat-raised-button color='primary' class="skip-btn" (click)="skip()" >Skip</button>
     </div>
   </ng-template>
 
 <ng-template #mobile>
-  <div *ngIf="!(isGameOn$ | async); else restartMobile">
+  <div *ngIf="!(isGameOn$ | async); else restartMobile" class="controls-mobile-btn">
     <mat-icon (click)="startGame()">play_arrow</mat-icon>
+    <span>Start</span>
   </div>
 </ng-template>
 
 <ng-template #restartMobile>
-  <div class="start-game-btns-mobile" >  
-    <mat-icon (click)="reStartGame()">restart_alt</mat-icon>
-    <mat-icon (click)="skip()">skip_next</mat-icon>
+  <div class="start-game-btns-mobile" >
+    <div class="controls-mobile-btn">
+      <mat-icon (click)="reStartGame()">restart_alt</mat-icon>
+      <span>Restart</span>
+    </div> 
+    <div class="controls-mobile-btn">
+      <mat-icon (click)="skip()">skip_next</mat-icon>
+      <span>Skip</span>      
+    </div> 
   </div>
 </ng-template>

@@ -1,6 +1,9 @@
-mat-icon {
+.settings-btn {
     color: white;
-    display: block;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 

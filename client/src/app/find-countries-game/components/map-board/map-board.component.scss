@@ -1,17 +1,17 @@
 :host {
     position: relative;
     display: grid;
+    align-items: center;
 }
 
 #chartdiv {
    width: 100vw;
-
+   height: 100%;
 }
 
 .chart-handlers {
     position: absolute;
     display: grid;
     grid-gap: 0.5rem;
-    margin: auto 0;
     padding-left: 0.5rem;
 }

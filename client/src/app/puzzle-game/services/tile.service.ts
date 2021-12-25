@@ -14,12 +14,6 @@ interface shape {
 })
 export class TileService {
 
-    private tool: any;
-
-    constructor() {
-        this.tool = new paperCore.Tool();
-    }
-
     private getMask(tileRatio: number, topTab: number, rightTab: number, bottomTab: number, leftTab: number, tileWidth: number): paper.Path {
 
         let curvyCoords = [
@@ -125,10 +119,21 @@ export class TileService {
                 tile.clipped = true;
                 tile.opacity = 1;   
                 tile.data = {
-                    picked: false,
                     shape: shape
                 }
-                
+
+                tile.onMouseDown = () => {
+                    tile.bringToFront();
+                }
+
+                tile.onMouseDrag = (event: any) => {
+                    tile.position = tile.position.add(event.delta)
+                }
+
+                tile.onMouseUp = (event: any) => {
+                    this.releaseTile(tile, event);
+                }
+
                 tiles.push(tile);
                 tileIndexes.push(tileIndexes.length);
             }
@@ -224,58 +229,7 @@ export class TileService {
         return Math.pow(-1, Math.floor(Math.random() * 2));
     }
 
-    public onMouseMove(): void {
-        
-        this.tool.onMouseMove = (event: paper.ToolEvent) => {
-
-            let pickedItem = paperCore.project.getItem({
-                data: {
-                    picked: true
-                }
-            })
-
-            if(pickedItem) {
-                    pickedItem.position = pickedItem.position.add(event.delta)
-            }
-        }
-    }
-    
-    public onMouseDown(): void {
-
-        this.tool.onMouseDown = (event: paper.ToolEvent) => {
-            
-            if(event.item) {
-
-                console.log(event.item)
-                event.item.bringToFront();
-                // event.item.scale(1.25)
-                event.item.data.picked = true;
-
-            }
-        }
-    }
-
-    public onMouseUp(): void {
-        
-        this.tool.onMouseUp = (event: paper.ToolEvent) => {
-
-            let pickedItem = paperCore.project.getItem({
-                data: {
-                    picked: true
-                }
-            })
-
-            if(pickedItem) {   
-
-                this.releaseTile(pickedItem, event);
-
-                pickedItem.data.picked = false;
-                // pickedItem.scale(0.8);
-            }
-        }
-    }
-
-    public releaseTile(tileGroup: paper.Item, event: paper.ToolEvent): void {
+    private releaseTile(tileGroup: paper.Item, event: paper.ToolEvent): void {
 
         let tileWidth = 100;
         

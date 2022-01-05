@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as paperCore from "paper/dist/paper-core";
-import { Group, PaperScope, Path, Point, project, Raster, Rectangle, Size, view } from "paper/dist/paper-core";
+import { Group, Path, Point, Raster, Rectangle, Size } from "paper/dist/paper-core";
 
 interface shape {
     bottomTab: number;
@@ -13,6 +13,9 @@ interface shape {
     providedIn: "root"
 })
 export class TileService {
+
+    private innerBoard!: paper.PathItem;
+    private outerBoard!: paper.PathItem;
 
     private getMask(tileRatio: number, topTab: number, rightTab: number, bottomTab: number, leftTab: number, tileWidth: number): paper.Path {
 
@@ -83,7 +86,7 @@ export class TileService {
         let diagonal1 = new Path.Line(topLeftEdge, bottomRightEdge);
         let diagonal2 = new Path.Line(topRightEdge, bottomLeftEdge);
 
-        let center = diagonal1.getCrossings(diagonal2   );
+        let center = diagonal1.getCrossings(diagonal2);
         
         mask.data.centerDiff = center[0].point.subtract(mask.position); 
     
@@ -124,6 +127,7 @@ export class TileService {
 
                 tile.onMouseDown = () => {
                     tile.bringToFront();
+                    tile.data.originalPosition = tile.position;
                 }
 
                 tile.onMouseDrag = (event: any) => {
@@ -131,7 +135,19 @@ export class TileService {
                 }
 
                 tile.onMouseUp = (event: any) => {
-                    this.releaseTile(tile, event);
+                    
+                    if(event.point.isInside(this.innerBoard.bounds)) {
+                        
+                        this.releaseTile(tile, event);
+
+                    } else if (tile.intersects(this.innerBoard)) {
+
+                        tile.position = tile.data.originalPosition;
+
+                    } else {
+                        tile.data.originalPosition = tile.position;
+                        tile.data.cellPosition = undefined;
+                    }
                 }
 
                 tiles.push(tile);
@@ -145,19 +161,31 @@ export class TileService {
                 let index1 = Math.floor(Math.random() * tileIndexes.length);
                 let index2 = tileIndexes[index1];
                 let tile = tiles[index2];
-                tileIndexes.splice (index1, 1);
+                tileIndexes.splice(index1, 1);
+                
+                let viewSize = paperCore.project.view.bounds;
 
-                let position =  new Point(tileWidth, tileWidth).add( 
-                                new Point(tileWidth * (x * 2 + (y % 2)), tileWidth  * y));
+                let position = new Point(
+                    Math.random()*viewSize.width,
+                    Math.random()*viewSize.height);
 
-                this.placeTileAtCellPosition(tile, position, tileWidth);
+                tile.position = position;
+
+                while(position.isInside(this.innerBoard.bounds) || tile.intersects(this.innerBoard) || tile.intersects(this.outerBoard)) {
+
+                    position = new Point(
+                        Math.random()*1000,
+                        Math.random()*800);
+                    
+                    tile.position = position;
+                }
+
+                tile.data.cellPosition = undefined;
             }
         }
 
         return tiles;
     }
-
-
 
     private getRandomShapes(width: number, height: number): shape[] {
         let shapeArray = new Array();
@@ -237,20 +265,23 @@ export class TileService {
             className: "Group"
         }) as paper.Group[];
 
+        let itemsInInnerBoard = allItems.filter(item => item.data.cellPosition);
+
         let cellPosition = new Point(
             Math.round(event.point.x / tileWidth),
             Math.round(event.point.y / tileWidth));
 
+            
         let hasConflict = false;
 
-        let alreadyPlacedTile = this.getTileAtCellPosition(cellPosition, allItems);
+        let alreadyPlacedTile = this.getTileAtCellPosition(cellPosition, itemsInInnerBoard);
 
         hasConflict = !!alreadyPlacedTile;
 
-        let topTile = this.getTileAtCellPosition(cellPosition.add(new Point(0, -1)), allItems);
-        let rightTile = this.getTileAtCellPosition(cellPosition.add(new Point(1, 0)), allItems);
-        let bottomTile = this.getTileAtCellPosition(cellPosition.add(new Point(0, 1)), allItems);
-        let leftTile = this.getTileAtCellPosition(cellPosition.add(new Point(-1, 0)), allItems);
+        let topTile = this.getTileAtCellPosition(cellPosition.add(new Point(0, -1)), itemsInInnerBoard);
+        let rightTile = this.getTileAtCellPosition(cellPosition.add(new Point(1, 0)), itemsInInnerBoard);
+        let bottomTile = this.getTileAtCellPosition(cellPosition.add(new Point(0, 1)), itemsInInnerBoard);
+        let leftTile = this.getTileAtCellPosition(cellPosition.add(new Point(-1, 0)), itemsInInnerBoard);
 
         if (topTile && topTile !== tileGroup) {
             hasConflict = hasConflict || !(topTile.data.shape.bottomTab + tileGroup.data.shape.topTab === 0);
@@ -274,7 +305,7 @@ export class TileService {
         
         } else {
 
-            let position = tileGroup.data.cellPosition.multiply(tileWidth);
+            let position = tileGroup.data.originalPosition;
 
             this.placeTileAtCellPosition(tileGroup, position, tileWidth);
             
@@ -287,13 +318,17 @@ export class TileService {
         let tile!: paper.Group;
         
         for (let i = 0; i < tilesArray.length; i++) {
+            
+            if(tilesArray[i].data.cellPosition) {
 
-            let {x, y} = tilesArray[i].data.cellPosition;
-
-            if (x === point.x && y === point.y) {
-                tile = tilesArray[i];
-                break;
+                let {x, y} = tilesArray[i].data.cellPosition;
+    
+                if (x === point.x && y === point.y) {
+                    tile = tilesArray[i];
+                    break;
+                }
             }
+
         }
         return tile;
     }
@@ -307,10 +342,18 @@ export class TileService {
         let centerDiff = tile.getItem({}).data.centerDiff;
             
         tile.position = cellPosition.multiply(tileWidth).subtract(centerDiff);
-        tile.data.cellPosition = cellPosition;  
+
+        if(tile.isInside(this.innerBoard.bounds)) {
+
+            tile.data.cellPosition = cellPosition; 
+        } else {
+            
+            tile.position = tile.data.originalPosition;
+            tile.data.cellPosition = undefined; 
+        }
     }
 
-    private getTileRaster(size: paper.Size, offset: paper.Point) {
+    private getTileRaster(size: paper.Size, offset: paper.Point): paper.Raster {
 
         let raster = new Raster({
             crossOrigin: 'anonymous',
@@ -327,5 +370,19 @@ export class TileService {
         let clone = raster.getSubRaster(new Rectangle(topLeftEdge.add(offset), newSize));
 
         return clone;
+    }
+
+    public createGame(view: HTMLCanvasElement) {
+        paperCore.setup(view);
+        
+        let rectObj = new Rectangle(0, 0, 500, 500);
+        this.innerBoard = new Path.Rectangle(rectObj);
+        this.innerBoard.strokeColor = "black" as unknown as paper.Color;
+        this.innerBoard.position = paperCore.project.view.center;
+
+        let canvasArea = paperCore.project.view.bounds;
+        this.outerBoard = new Path.Rectangle(canvasArea);
+
+        this.createTiles(5,5,1,100);
     }
 }

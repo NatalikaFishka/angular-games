@@ -1,6 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import * as paperCore from "paper/dist/paper-core";
-import { Raster, View, view, Point } from "paper/dist/paper-core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { TileService } from "./services/tile.service";
 
 @Component({
@@ -18,9 +16,6 @@ export class PuzzleGameComponent implements OnInit {
    
 
     ngOnInit(): void {
-        paperCore.setup(this.canvasElement.nativeElement);
-
-        this.tileService.createTiles(5,5,1, 100);
-    
+        this.tileService.createGame(this.canvasElement.nativeElement);    
     }
 }

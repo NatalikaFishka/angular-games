@@ -1,21 +1,23 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { TileService } from "./services/tile.service";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit } from "@angular/core";
 
 @Component({
     selector: "app-puzzle-game",
     templateUrl: "./puzzle-game.component.html",
     styleUrls: ["./puzzle-game.component.scss"]
 })
-export class PuzzleGameComponent implements OnInit {
+export class PuzzleGameComponent implements AfterViewInit, OnChanges{
 
-    @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
+    public rasterImage!: ElementRef<HTMLImageElement>;
 
-    constructor(
-        private tileService: TileService
+    constructor( 
+        private changeDetectorRef: ChangeDetectorRef
     ) {}
-   
 
-    ngOnInit(): void {
-        this.tileService.createGame(this.canvasElement.nativeElement);    
+    ngAfterViewInit(): void {   
+        this.changeDetectorRef.detectChanges();
+        console.log(this.rasterImage)
+    }
+
+    ngOnChanges(): void {
     }
 }

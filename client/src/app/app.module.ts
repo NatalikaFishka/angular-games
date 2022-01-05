@@ -15,6 +15,7 @@ import { AuthUserReducer } from './app-shell/store/reducer/auth.reducer';
 import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
 import { FindCountriesGameModule } from './find-countries-game/find-countries-game.module';
 import { FindCountriesGameReducer } from './find-countries-game/store/reducer/find-countries-game.reducer';
+import { PuzzleGameModule } from './puzzle-game/puzzle-game.module';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FindCountriesGameReducer } from './find-countries-game/store/reducer/fi
     AppRoutingModule,
     MatchCardsGameModule,
     FindCountriesGameModule,
+    PuzzleGameModule,
     HomePageModule,
     AppShellModule,
     StoreModule.forRoot({

@@ -1,5 +1,5 @@
-<canvas 
-    #canvasElement 
-    width="1200px" 
-    height="800px" 
-></canvas>
+
+<div class="main">
+    <app-canvas-board *ngIf="rasterImage" [rasterImage]="rasterImage"></app-canvas-board>
+    <app-image-preview (image)="rasterImage = $event"></app-image-preview>
+</div>

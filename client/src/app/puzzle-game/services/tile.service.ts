@@ -354,7 +354,7 @@ export class TileService {
         if(getCrossingsCurves < 2) {
             tile.data.cellPosition = innerBoardCellPosition; 
         } else {
-
+            // leave it for troubleshooting
             console.log("Tile INTERSECTS", tile.intersects(this.innerBoard), firstChild.getCrossings(this.innerBoard))
             console.log('Maybe no conflict and it just thinks that tile not inside. Drop Point ', dropPoint, "innerBoardCellPosition ", innerBoardCellPosition, "innerLocation", innerLocation , "position", tile.position)
             tile.position = tile.data.originalPosition;
@@ -384,7 +384,6 @@ export class TileService {
         // 60% of 75% of canvas board css area
         let allowedFilledWidthForCanvas = paperCore.project.view.bounds.topRight.x * 0.6 * 0.75;
         
-        if(rasterImage.naturalWidth > allowedFilledWidthForCanvas) {
             
             this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
             this.tileWidth = this.idealTileWidth * this.gameRatio;
@@ -392,7 +391,7 @@ export class TileService {
             rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
             rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
             rasterImage.hidden = true;
-        }
+        
         
         this.rasterImage = rasterImage;
 

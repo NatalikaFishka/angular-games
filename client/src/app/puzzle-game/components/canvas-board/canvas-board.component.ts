@@ -18,5 +18,6 @@ export class CanvasBoardComponent implements OnInit {
 
     ngOnInit(): void {
         this.tileService.createGame(this.canvasElement.nativeElement, this.rasterImage.nativeElement);    
+        console.log(this.rasterImage)
     }
 }

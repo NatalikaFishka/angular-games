@@ -394,10 +394,7 @@ export class TileService {
 
             rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
             rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
-            // rasterImage.hidden = true;
-
-            console.log("raster", rasterImage)
-        
+            rasterImage.hidden = true;        
         
         this.rasterImage = rasterImage;
 

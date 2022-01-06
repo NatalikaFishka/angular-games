@@ -7,7 +7,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, 
 })
 export class PuzzleGameComponent implements AfterViewInit {
 
-    public rasterImage!: HTMLImageElement;
+    public rasterImage!: ElementRef<HTMLImageElement>;
     public imageUrl!: string;
     public finalImageElementRef: boolean = false;
 
@@ -24,7 +24,7 @@ export class PuzzleGameComponent implements AfterViewInit {
         this.resetImageReference();
     }
     
-    public onImageElementChange(event: HTMLImageElement): void {
+    public onImageElementChange(event: ElementRef<HTMLImageElement>): void {
         this.rasterImage = event;
     }
     

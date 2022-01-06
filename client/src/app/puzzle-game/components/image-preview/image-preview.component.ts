@@ -8,17 +8,14 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 export class ImagePreviewComponent implements OnInit {
 
     @ViewChild("previewImage", { static: true }) public previewImage!: ElementRef<HTMLImageElement>;
-    @Output() imageElement: EventEmitter<HTMLImageElement> = new EventEmitter<HTMLImageElement>(); 
+    @Output() imageElement: EventEmitter<ElementRef<HTMLImageElement>> = new EventEmitter<ElementRef<HTMLImageElement>>(); 
     @Input() imageUrl: string = "";
 
     ngOnInit(): void {
 
         this.previewImage.nativeElement.onload = () => {
-            this.imageElement.emit(this.previewImage.nativeElement);
+            this.imageElement.emit(this.previewImage);
         }
-
-          
-        console.log("HTML native element of image", this.previewImage)
     }
 
     onImageUrlChange(event: string): void {

@@ -1,4 +1,3 @@
-import { has } from "@amcharts/amcharts4/.internal/core/utils/Array";
 import { Injectable } from "@angular/core";
 import * as paperCore from "paper/dist/paper-core";
 import { Color, Group, Path, Point, Raster, Rectangle, Size } from "paper/dist/paper-core";
@@ -124,6 +123,7 @@ export class TileService {
 
                 tile.onMouseDown = () => {
                     tile.bringToFront();
+                    console.log(tile)
                 }
 
                 tile.onMouseDrag = (event: any) => {
@@ -147,6 +147,7 @@ export class TileService {
                 }
 
                 tile.scale(this.gameRatio);
+                tile.data.index =(x + 1) * (y + 1);
 
                 tiles.push(tile);
                 tileIndexes.push(tileIndexes.length);
@@ -179,6 +180,8 @@ export class TileService {
                 tile.data.cellPosition = undefined;
             }
         }
+
+        console.log(tiles)
 
         return tiles;
     }
@@ -293,6 +296,7 @@ export class TileService {
         if (!hasConflict) {
             
             this.placeTileAtCellPosition(tileGroup, event.point);
+            this.isGameCompleted();
         
         } else {
 
@@ -390,7 +394,7 @@ export class TileService {
 
             rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
             rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
-            rasterImage.hidden = true;
+            // rasterImage.hidden = true;
         
         
         this.rasterImage = rasterImage;
@@ -422,5 +426,21 @@ export class TileService {
 
     private randomIntFromInterval(min: number, max: number): number { 
         return Math.floor(Math.random() * (max - min + 1) + min)
-      }
+    }
+
+    private isGameCompleted(): boolean {
+        let allTiles = paperCore.project.getItems({
+            className: "Group"
+        }) as paper.Group[];
+
+        let tilesInCells = allTiles.filter(tile => tile.data.cellPosition);
+
+        if(allTiles.length !== tilesInCells.length) {        
+            return false;
+        }
+        
+        let result = allTiles.every(tile => tile.data.index === (tile.data.cellPosition.x * tile.data.cellPosition.y));
+
+        return result;
+    }
 }

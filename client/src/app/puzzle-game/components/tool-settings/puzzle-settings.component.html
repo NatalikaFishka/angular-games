@@ -5,9 +5,14 @@
   <form [formGroup]='form' (submit)="formSubmit()">
     <mat-form-field appearance='outline'>
       <mat-label>Puzzle Image</mat-label>
-      <mat-select formControlName='puzzleImage'>
-        <mat-option *ngFor="let imageName of puzzleImages" [value]="imageName">
-          {{imageName}}
+      <mat-select formControlName='puzzleImage'
+      >
+        <mat-option 
+          *ngFor="let imageName of puzzleImages" 
+          [value]="imageName.name"
+          (onSelectionChange)="onChange($event)"
+          >
+          {{imageName.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

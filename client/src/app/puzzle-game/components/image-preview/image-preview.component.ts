@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 
 @Component({
     selector: "app-image-preview",
@@ -7,12 +7,14 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, Vie
 })
 export class ImagePreviewComponent implements OnInit {
 
-    @Output() image = new EventEmitter<ElementRef<HTMLImageElement>>(); 
+    @Output() image: EventEmitter<ElementRef<HTMLImageElement>> = new EventEmitter<ElementRef<HTMLImageElement>>(); 
     @ViewChild("previewImage", { static: true }) public previewImage!: ElementRef<HTMLImageElement>;
+    @Input() imageUrl: string = "";
 
     ngOnInit(): void {
         this.previewImage.nativeElement.onload = () => {
             this.image.emit(this.previewImage);
+            console.log(this.previewImage)
         }
     }
 }

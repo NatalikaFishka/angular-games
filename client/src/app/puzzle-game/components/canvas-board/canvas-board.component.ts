@@ -9,15 +9,15 @@ import { TileService } from "../../services/tile.service";
 export class CanvasBoardComponent implements OnInit {
 
     @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
-    @Input() rasterImage!: ElementRef<HTMLImageElement>;
+    @Input() rasterImage!: HTMLImageElement;
 
     constructor(
         private tileService: TileService
-    ) {}
-   
+    ) {}  
+
 
     ngOnInit(): void {
-        this.tileService.createGame(this.canvasElement.nativeElement, this.rasterImage.nativeElement);    
-        console.log(this.rasterImage)
+        this.tileService.createGame(this.canvasElement.nativeElement, this.rasterImage);  
     }
+
 }

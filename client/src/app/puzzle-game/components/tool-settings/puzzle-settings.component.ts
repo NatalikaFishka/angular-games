@@ -10,7 +10,7 @@ import { PuzzleConfigModel } from '../../models/puzzle-config.mode';
 })
 export class PuzzleSettingsComponent implements OnInit, OnDestroy{
 
-  @Output() imageUrlEmitter: EventEmitter<string> = new EventEmitter<string>();
+  @Output() imageUrlChange: EventEmitter<string> = new EventEmitter<string>();
 
   public form: FormGroup;
   public puzzleImages: PuzzleConfigModel[] = PuzzleConfig;
@@ -27,7 +27,7 @@ export class PuzzleSettingsComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.imageUrlEmitter.emit(this.puzzleImages[0].url);
+    this.imageUrlChange.emit(this.puzzleImages[0].url);
     // this.store.dispatch(setGameSettings({payload: this.form.value}));
   }
   
@@ -47,7 +47,7 @@ export class PuzzleSettingsComponent implements OnInit, OnDestroy{
 
       let newImageUrl = this.puzzleImages.find(item => item.name === newImageName)?.url;
 
-      this.imageUrlEmitter.emit(newImageUrl);
+      this.imageUrlChange.emit(newImageUrl);
       console.log(event.source.viewValue, newImageUrl)
     }
   }

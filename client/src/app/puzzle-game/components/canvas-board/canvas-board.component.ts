@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChange, SimpleChanges, ViewChild } from "@angular/core";
 import { TileService } from "../../services/tile.service";
 
 @Component({
@@ -20,8 +20,14 @@ export class CanvasBoardComponent implements OnInit, OnChanges {
         this.tileService.createGame(this.canvasElement.nativeElement, this.rasterImage.nativeElement);  
     }
 
-    ngOnChanges(): void {
-        console.log("Changes!!!!!!!!!!!!!!!!!!!")
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log("Changes!!!!!!!!!!!!!!!!!!!", changes);
+
+        if(!changes.rasterImage.firstChange) {
+            
+            this.tileService.removeGame();
+            this.tileService.createGame(this.canvasElement.nativeElement, this.rasterImage.nativeElement);
+        }
     }
 
 }

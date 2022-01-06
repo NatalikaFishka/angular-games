@@ -442,4 +442,8 @@ export class TileService {
 
         return result;
     }
+
+    public removeGame(): void {
+        paperCore.project.remove();
+    }
 }

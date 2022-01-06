@@ -47,8 +47,8 @@ export class PuzzleSettingsComponent implements OnInit, OnDestroy{
 
       let newImageUrl = this.puzzleImages.find(item => item.name === newImageName)?.url;
 
-      this.imageUrlEmitter.emit(this.puzzleImages[0].url);
-      console.log(event.source.viewValue)
+      this.imageUrlEmitter.emit(newImageUrl);
+      console.log(event.source.viewValue, newImageUrl)
     }
   }
 }

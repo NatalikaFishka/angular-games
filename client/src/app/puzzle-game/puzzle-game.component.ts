@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnChanges, SimpleChange, SimpleChanges} from "@angular/core";
 
 @Component({
     selector: "app-puzzle-game",
     templateUrl: "./puzzle-game.component.html",
     styleUrls: ["./puzzle-game.component.scss"]
 })
-export class PuzzleGameComponent implements AfterViewInit {
+export class PuzzleGameComponent implements AfterViewInit, OnChanges {
 
     public rasterImage!: ElementRef<HTMLImageElement>;
     public imageUrl!: string;
@@ -16,6 +16,10 @@ export class PuzzleGameComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {  
         this.changeDetectorRef.detectChanges();
-      }
+    }
+
+    ngOnChanges(value: SimpleChanges): void {
+        console.log("ITS CHANGEd", value)
+    }
     
 }

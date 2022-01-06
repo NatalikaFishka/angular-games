@@ -12,3 +12,13 @@
         font-size: 2rem;
     }
 }
+
+@media screen and (max-width: 900px)  {
+    :host {
+        min-width: 10rem;
+    }
+
+    mat-card-header {
+        display: none;
+    }
+}

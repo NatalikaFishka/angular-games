@@ -124,7 +124,6 @@ export class TileService {
 
                 tile.onMouseDown = () => {
                     tile.bringToFront();
-                    tile.data.originalPosition = tile.position;
                 }
 
                 tile.onMouseDrag = (event: any) => {
@@ -176,7 +175,7 @@ export class TileService {
                 let position = new Point(randomX, randomY);
 
                 tile.position = position;
-
+                tile.data.originalPosition = position;
                 tile.data.cellPosition = undefined;
             }
         }
@@ -353,6 +352,7 @@ export class TileService {
 
         if(getCrossingsCurves < 2) {
             tile.data.cellPosition = innerBoardCellPosition; 
+            tile.data.originalPosition = tile.position;
         } else {
             // leave it for troubleshooting
             console.log("Tile INTERSECTS", tile.intersects(this.innerBoard), firstChild.getCrossings(this.innerBoard))
@@ -400,7 +400,7 @@ export class TileService {
         
         let rectObj = new Rectangle(0, 0, tilesInRaw * this.tileWidth, tiledInColumn * this.tileWidth);
         this.innerBoard = new Path.Rectangle(rectObj);
-        this.innerBoard.strokeColor =  new Color(0,0,0);
+        this.innerBoard.strokeColor =  new Color(204, 204, 204);
         this.innerBoard.shadowColor = new Color(0,0,0);
         this.innerBoard.shadowBlur = 10;
         this.innerBoard.fillColor = new Color(255,255,255)

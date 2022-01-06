@@ -1,0 +1,26 @@
+<mat-card class="content">
+  <mat-card-header>
+    <mat-card-title>Settings</mat-card-title>
+  </mat-card-header>
+  <form [formGroup]='form' (submit)="formSubmit()">
+    <mat-form-field appearance='outline'>
+      <mat-label>Puzzle Image</mat-label>
+      <mat-select formControlName='puzzleImage'>
+        <mat-option *ngFor="let imageName of puzzleImages" [value]="imageName">
+          {{imageName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance='outline'>
+      <mat-label>Complexity</mat-label>
+      <mat-select formControlName='puzzleComplexity'>
+        <mat-option *ngFor="let complexity of puzzleComplexity" [value]="complexity">
+          {{complexity}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color='primary'>Start game</button>
+  </form>
+</mat-card>

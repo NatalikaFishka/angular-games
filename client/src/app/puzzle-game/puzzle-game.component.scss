@@ -7,8 +7,9 @@
     position: relative;
 
     grid-template-columns: 75% 25%; 
+    grid-template-rows: 1fr 1fr;
     grid-template-areas: "board track-results"
-                            "board game-controls"
+                            // "board game-controls"
                             "board tool-settings";
 
     app-canvas-board {
@@ -18,14 +19,15 @@
 
     }
 
-    // app-find-countries-results {
-    //     grid-area: track-results;
-    //     position: absolute;
-    // }
-    // app-find-countries-settings {
-    //     grid-area: tool-settings;
-    //     position: absolute;
-    // }
+    app-puzzle-results {
+        grid-area: track-results;
+        position: absolute;
+    }
+
+    app-puzzle-settings {
+        grid-area: tool-settings;
+        position: absolute;
+    }
     
     // app-game-controls {
     //     grid-area: game-controls;

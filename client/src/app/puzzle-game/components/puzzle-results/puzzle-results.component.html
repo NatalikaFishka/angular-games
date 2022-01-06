@@ -10,19 +10,18 @@
             alarm
         </mat-icon> 
         <span>
-            {{gameResultService.gameTimer$ | async | secondsConverter}}
+            {{ 77 | secondsConverter }}
         </span>
     </div>
-    <div class="time" >
+    <div class="time" style="display: none;">
         <mat-icon 
-            *ngIf="isLoggedIn$ | async; else notLoggedIn"
             matTooltip="Your best score"
             matTooltipPosition="left"
         >
             emoji_events
         </mat-icon>
-        <span *ngIf="bestPreviousResult$ | async as bestResult; else noresult" >
-            {{bestResult | secondsConverter}} 
+        <span *ngIf="false; else noresult" >
+            {{ 77 }} 
         </span>
     </div>
 </mat-card>

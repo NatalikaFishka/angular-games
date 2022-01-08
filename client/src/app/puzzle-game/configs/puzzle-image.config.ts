@@ -11,7 +11,7 @@ export const PuzzleConfig: PuzzleConfigModel[] = [{
         url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641633062/AngularGames/Puzzles/zombie3_tgin4v.jpg"
     }, {
         name: "Plants vs. Zombies 4",
-        url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641633463/AngularGames/Puzzles/zombie4_yjgdxo.jpg"
+        url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641634140/AngularGames/Puzzles/zombie4_vae71e.jpg"
     }, {
         name: "Plants vs. Zombies 5",
         url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641633534/AngularGames/Puzzles/zombie5_rmxena.jpg"

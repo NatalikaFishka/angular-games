@@ -1,0 +1,7 @@
+
+<div class="main">
+    <app-canvas-board *ngIf="rasterImage" [rasterImage]="rasterImage"></app-canvas-board>
+    <app-image-preview *ngIf="finalImageElementRef" (imageElement)="onImageElementChange($event)" [imageUrl]="imageUrl"></app-image-preview>
+    <app-puzzle-settings (imageUrlChange)="onImageUrlChange($event)"></app-puzzle-settings>
+    <app-puzzle-results></app-puzzle-results>
+</div>

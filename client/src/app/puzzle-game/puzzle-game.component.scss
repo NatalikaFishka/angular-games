@@ -1,0 +1,69 @@
+.main {
+    height: 100%;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+
+    grid-template-columns: 75% 25%; 
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: "board track-results"
+                            "board tool-settings"
+                            "board image-preview";
+
+    app-canvas-board {
+        grid-area: board;
+        width: 100%;
+        height: calc(100vh - 64px);
+
+    }
+
+    app-puzzle-results {
+        grid-area: track-results;
+        position: absolute;
+    }
+
+    app-puzzle-settings {
+        grid-area: tool-settings;
+        position: absolute;
+    }
+    
+    app-image-preview {
+        grid-area: image-preview;
+        position: absolute;
+    }
+
+    // app-find-countries-snack-bar {
+    //     grid-area: board;
+    // }
+}
+
+@media screen and (max-width: 900px) {
+    .main {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr min-content;
+        grid-template-areas: "board"
+                            "footer";
+        overflow: scroll;
+        justify-items: normal; 
+
+        app-find-countries-results {
+            grid-area: board;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        app-mobile-footer {
+            grid-area: footer;
+            background-color: #3f51b5;
+            height: 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            justify-items: center;
+        }
+    }
+  }
+

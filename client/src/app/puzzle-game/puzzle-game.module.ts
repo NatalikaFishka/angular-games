@@ -9,7 +9,6 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SharedModule } from "../shared/shared.module";
-import { CanvasBoardComponent } from "./components/canvas-board/canvas-board.component";
 import { ImagePreviewComponent } from "./components/image-preview/image-preview.component";
 import { PuzzleResultComponent } from "./components/puzzle-results/puzzle-results.component";
 import { PuzzleSettingsComponent } from "./components/tool-settings/puzzle-settings.component";
@@ -18,7 +17,6 @@ import { PuzzleGameComponent } from "./puzzle-game.component";
 @NgModule({
     declarations: [
         PuzzleGameComponent,
-        CanvasBoardComponent,
         ImagePreviewComponent,
         PuzzleSettingsComponent,
         PuzzleResultComponent

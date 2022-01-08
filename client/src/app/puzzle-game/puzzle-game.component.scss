@@ -12,10 +12,16 @@
                             "board tool-settings"
                             "board image-preview";
 
-    app-canvas-board {
+    .canvas-container {
         grid-area: board;
         width: 100%;
         height: calc(100vh - 64px);
+
+        
+        canvas {
+            width: 100vw;
+            height: 100%;
+        }
 
     }
 

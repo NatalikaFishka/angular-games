@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild} from "@angular/core";
+import { TileService } from "./services/tile.service";
 
 @Component({
     selector: "app-puzzle-game",
@@ -7,31 +8,27 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, 
 })
 export class PuzzleGameComponent implements AfterViewInit {
 
-    public rasterImage!: ElementRef<HTMLImageElement>;
     public imageUrl!: string;
-    public finalImageElementRef: boolean = false;
+
+    @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
+    @ViewChild("imageToRaster", { static: true }) public imageToRaster!: ElementRef<HTMLImageElement>;
+    @Input() rasterImage!: HTMLImageElement;
 
     constructor(
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private tileService: TileService
     ) {}
-
+    
     ngAfterViewInit(): void {  
         this.changeDetectorRef.detectChanges();
     }    
-
+    
     public onImageUrlChange(event: string): void {
         this.imageUrl = event;
-        this.resetImageReference();
-    }
-    
-    public onImageElementChange(event: ElementRef<HTMLImageElement>): void {
-        this.rasterImage = event;
-    }
-    
-    private resetImageReference(): void {
-        this.finalImageElementRef = false;
-        setTimeout(() => {this.finalImageElementRef = true}, 500)
-        
+
+        this.imageToRaster.nativeElement.onload = () => {
+            this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement); 
+        }
     }
     
 }

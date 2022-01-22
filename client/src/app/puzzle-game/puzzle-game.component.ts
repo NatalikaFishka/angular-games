@@ -1,4 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, ViewChild} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import { PuzzleConfig } from "./configs/puzzle-image.config";
+import { PuzzleGameSettings } from "./models/puzzle-game-settings.config";
 import { TileService } from "./services/tile.service";
 
 @Component({
@@ -6,13 +8,13 @@ import { TileService } from "./services/tile.service";
     templateUrl: "./puzzle-game.component.html",
     styleUrls: ["./puzzle-game.component.scss"]
 })
-export class PuzzleGameComponent implements AfterViewInit {
-
-    public imageUrl!: string;
-
+export class PuzzleGameComponent implements AfterViewInit, OnInit {
+    
     @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
     @ViewChild("imageToRaster", { static: true }) public imageToRaster!: ElementRef<HTMLImageElement>;
-    @Input() rasterImage!: HTMLImageElement;
+
+    public imageUrl: string | undefined;
+    public isGameOn: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -22,13 +24,41 @@ export class PuzzleGameComponent implements AfterViewInit {
     ngAfterViewInit(): void {  
         this.changeDetectorRef.detectChanges();
     }    
-    
-    public onImageUrlChange(event: string): void {
-        this.imageUrl = event;
 
+    ngOnInit(): void {
+        
         this.imageToRaster.nativeElement.onload = () => {
-            this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement); 
+
+            if(!this.isGameOn) {
+                this.drawImage();
+            }
         }
+    }
+
+    private startGame(): void {
+        this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement); 
+    }
+
+
+    private drawImage(): void {   
+        
+        this.tileService.drawImage(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement)
+
+    }
+
+    public settingsChanged(event: PuzzleGameSettings): void {
+
+        let currentImageUrl = PuzzleConfig.find(item => item.name === event.puzzleImage)?.url;
+        this.isGameOn = event.isGameStarted;
+        
+        if (event.isGameStarted) {
+            this.startGame();
+        } else if(currentImageUrl !== this.imageUrl) {
+            this.imageUrl = currentImageUrl;
+        } else {
+            this.drawImage();
+        }
+
     }
     
 }

@@ -382,6 +382,20 @@ export class TileService {
         return clone;
     }
 
+    
+    public drawImage(view: HTMLCanvasElement, rasterImage: HTMLImageElement): void {        
+
+        paperCore.setup(view)
+
+        let drawImage = new Raster(rasterImage);
+        
+        //find center of 75% canvas' area
+        let positionX = paperCore.project.view.bounds.topRight.x * 0.75 / 2;
+        let positionY = paperCore.project.view.center.y;
+
+        drawImage.position = new Point(positionX, positionY);
+    }
+
     public createGame(view: HTMLCanvasElement, rasterImage: HTMLImageElement) {
         paperCore.setup(view); 
 
@@ -389,12 +403,11 @@ export class TileService {
         let allowedFilledWidthForCanvas = paperCore.project.view.bounds.topRight.x * 0.6 * 0.75;
         
             
-            this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
-            this.tileWidth = this.idealTileWidth * this.gameRatio;
+        this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
+        this.tileWidth = this.idealTileWidth * this.gameRatio;
 
-            rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
-            rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
-            rasterImage.hidden = true;        
+        rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
+        rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
         
         this.rasterImage = rasterImage;
 
@@ -442,8 +455,5 @@ export class TileService {
 
         return result;
     }
-
-    public removeGame(): void {
-        paperCore.project.remove();
-    }
+    
 }

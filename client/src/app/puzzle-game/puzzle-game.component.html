@@ -3,8 +3,8 @@
     <div class="canvas-container">
         <canvas #canvasElement ></canvas>
     </div>
-    <app-image-preview [imageUrl]="imageUrl"></app-image-preview>
-    <app-puzzle-settings (imageUrlChange)="onImageUrlChange($event)"></app-puzzle-settings>
+    <app-image-preview *ngIf="isGameOn" [imageUrl]="imageUrl"></app-image-preview>
+    <app-puzzle-settings (gameSettingsChange)="settingsChanged($event)"></app-puzzle-settings>
     <app-puzzle-results></app-puzzle-results>
 </div>
 

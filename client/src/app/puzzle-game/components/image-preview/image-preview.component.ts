@@ -7,7 +7,7 @@ import { Component, Input } from "@angular/core";
 })
 export class ImagePreviewComponent {
 
-    @Input() imageUrl: string = "";
+    @Input() imageUrl: string | undefined;
 
     onImageUrlChange(event: string): void {
         this.imageUrl = event;

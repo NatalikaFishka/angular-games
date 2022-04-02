@@ -50,11 +50,9 @@ export class PuzzleGameComponent implements AfterViewInit, OnInit {
 
         let currentImageUrl = PuzzleConfig.find(item => item.name === event.puzzleImage)?.url;
         this.isGameOn = event.isGameStarted;
-
-        let complexity = 1.5;
         
         if (event.isGameStarted) {
-            this.startGame(complexity);
+            this.startGame(event.puzzleComplexity);
         } else if(currentImageUrl !== this.imageUrl) {
             this.imageUrl = currentImageUrl;
         } else {

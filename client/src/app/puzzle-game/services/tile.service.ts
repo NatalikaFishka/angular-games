@@ -410,8 +410,6 @@ export class TileService {
         this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
         this.tileWidth = this.idealTileWidth * this.gameRatio * complexity;
 
-        console.log("TILE WIDTH", this.tileWidth)
-
         rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
         rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
         

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup } from '@angular/forms';
 import { PuzzleConfig } from '../../configs/puzzle-image.config';
+import { COMPLEXITY, ComplexityReadable } from '../../models/game-complexity.enum';
 import { PuzzleConfigModel } from '../../models/puzzle-config.mode';
 import { PuzzleGameSettings } from '../../models/puzzle-game-settings.config';
 
@@ -16,7 +17,7 @@ export class PuzzleSettingsComponent implements OnInit{
   
   public form: FormGroup;
   public puzzleImages: PuzzleConfigModel[] = PuzzleConfig;
-  public puzzleComplexity: string[] = ["Hard", "Medium", "Easy"];
+  public puzzleComplexity: string[] = Object.values(ComplexityReadable);
   public isGameStarted: boolean = false;
 
   constructor(
@@ -31,6 +32,7 @@ export class PuzzleSettingsComponent implements OnInit{
 
   public ngOnInit(): void {
     this.setSettings();    
+    console.log(this.puzzleComplexity)
   }
   
   public onChange(event: any) {
@@ -52,11 +54,14 @@ export class PuzzleSettingsComponent implements OnInit{
   }
   
   private setSettings(): void {
+
+    
+    let selectedComplexity: number = Number(Object.keys(ComplexityReadable).find(key => ComplexityReadable[key] === this.form.value.puzzleComplexity));
     
     let gameConfig: PuzzleGameSettings = {
       isGameStarted: this.isGameStarted,
       puzzleImage: this.form.value.puzzleImage,
-      puzzleComplexity: this.form.value.puzzleComplexity
+      puzzleComplexity: selectedComplexity
     };     
 
     this.gameSettingsChange.emit(gameConfig);

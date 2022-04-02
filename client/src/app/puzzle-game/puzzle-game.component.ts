@@ -35,8 +35,8 @@ export class PuzzleGameComponent implements AfterViewInit, OnInit {
         }
     }
 
-    private startGame(): void {
-        this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement); 
+    private startGame(complexity: number): void {
+        this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement, complexity); 
     }
 
 
@@ -50,9 +50,11 @@ export class PuzzleGameComponent implements AfterViewInit, OnInit {
 
         let currentImageUrl = PuzzleConfig.find(item => item.name === event.puzzleImage)?.url;
         this.isGameOn = event.isGameStarted;
+
+        let complexity = 1.5;
         
         if (event.isGameStarted) {
-            this.startGame();
+            this.startGame(complexity);
         } else if(currentImageUrl !== this.imageUrl) {
             this.imageUrl = currentImageUrl;
         } else {

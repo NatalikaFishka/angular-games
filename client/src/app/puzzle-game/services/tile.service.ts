@@ -44,7 +44,7 @@ export class TileService {
         }
 
         // Right    
-        let topRightEdge = topLeftEdge.add(new Point(this.idealTileWidth, 0));
+        let topRightEdge = topLeftEdge.add(new Point(this.idealTileWidth * tileRatio, 0));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = topRightEdge.add(new Point(-rightTab * curvyCoords[i * 6 + 1] * tileRatio,
             curvyCoords[i * 6 + 0] * tileRatio));
@@ -57,7 +57,7 @@ export class TileService {
             
         }
         //Bottom
-        let bottomRightEdge = topRightEdge.add(new Point(0, this.idealTileWidth));
+        let bottomRightEdge = topRightEdge.add(new Point(0, this.idealTileWidth * tileRatio));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = bottomRightEdge.subtract(new Point(curvyCoords[i * 6 + 0] * tileRatio,
             bottomTab * curvyCoords[i * 6 + 1] * tileRatio));
@@ -69,7 +69,7 @@ export class TileService {
             mask.cubicCurveTo(p1, p2, p3);
         }
         //Left
-        let bottomLeftEdge = bottomRightEdge.subtract(new Point(this.idealTileWidth, 0));
+        let bottomLeftEdge = bottomRightEdge.subtract(new Point(this.idealTileWidth * tileRatio, 0));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = bottomLeftEdge.subtract(new Point(-leftTab * curvyCoords[i * 6 + 1] * tileRatio,
             curvyCoords[i * 6 + 0] * tileRatio));
@@ -108,10 +108,13 @@ export class TileService {
                 border.strokeColor = new Color(0,0,0);;
                 border.strokeWidth = 5;
 
+                let idealSizedTileWidth = this.idealTileWidth * tileRatio;
+
                 
                 let img = this.getTileRaster(
-                    new Size(this.idealTileWidth, this.idealTileWidth), 
-                    new Point(this.idealTileWidth * x, this.idealTileWidth * y)
+                    new Size(idealSizedTileWidth, idealSizedTileWidth), 
+                    new Point(idealSizedTileWidth * x, idealSizedTileWidth * y),
+                    tileRatio
                 );
 
                 let tile = new Group([mask, border, img, border]);
@@ -366,7 +369,7 @@ export class TileService {
         }
     }
 
-    private getTileRaster(size: paper.Size, offset: paper.Point): paper.Raster {
+    private getTileRaster(size: paper.Size, offset: paper.Point, tileRatio: number): paper.Raster {
 
         let raster = new Raster(this.rasterImage);
 
@@ -374,7 +377,8 @@ export class TileService {
 
         raster.visible = false;
 
-        let topLeftEdge = new Point(-20, -20)
+        // +/-20 is a magic number
+        let topLeftEdge = new Point(-20 * tileRatio, -20 * tileRatio)
         let newSize = size.multiply(2)
 
         let clone = raster.getSubRaster(new Rectangle(topLeftEdge.add(offset), newSize));
@@ -396,7 +400,7 @@ export class TileService {
         drawImage.position = new Point(positionX, positionY);
     }
 
-    public createGame(view: HTMLCanvasElement, rasterImage: HTMLImageElement) {
+    public createGame(view: HTMLCanvasElement, rasterImage: HTMLImageElement, complexity: number) {
         paperCore.setup(view); 
 
         // 60% of 75% of canvas board css area
@@ -404,7 +408,9 @@ export class TileService {
         
             
         this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
-        this.tileWidth = this.idealTileWidth * this.gameRatio;
+        this.tileWidth = this.idealTileWidth * this.gameRatio * complexity;
+
+        console.log("TILE WIDTH", this.tileWidth)
 
         rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
         rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
@@ -433,7 +439,7 @@ export class TileService {
 
         this.innerBoard.position = positionOfInnerBoard;
 
-        this.createTiles(tilesInRaw, tiledInColumn, 1);
+        this.createTiles(tilesInRaw, tiledInColumn, complexity);
     }
 
     private randomIntFromInterval(min: number, max: number): number { 

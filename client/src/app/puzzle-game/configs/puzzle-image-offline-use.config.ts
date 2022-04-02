@@ -2,10 +2,10 @@ import { PuzzleConfigModel } from "../models/puzzle-config.mode";
 
 export const PuzzleConfig: PuzzleConfigModel[] = [{
         name: "Plants vs. Zombies 1",
-        url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641632868/AngularGames/Puzzles/zombie2_lskiui.jpg"
+        url: "../../../../assets/zombies/zombie1.jpg"
     }, {
         name: "Plants vs. Zombies 2",
-        url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641632979/AngularGames/Puzzles/zombie1_nd9kzp.jpg"
+        url: "../../../../assets/zombies/zombie2.jpg"
     }, {
         name: "Plants vs. Zombies 3",
         url: "https://res.cloudinary.com/dkqohzqus/image/upload/v1641633062/AngularGames/Puzzles/zombie3_tgin4v.jpg"

@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SharedModule } from "../shared/shared.module";
 import { ImagePreviewComponent } from "./components/image-preview/image-preview.component";
 import { PuzzleResultComponent } from "./components/puzzle-results/puzzle-results.component";
+import { PuzzleGameResultSnackBarComponent } from "./components/result-snack-bar/puzzle-game-result-snack-bar";
 import { PuzzleSettingsComponent } from "./components/tool-settings/puzzle-settings.component";
 import { PuzzleGameComponent } from "./puzzle-game.component";
 
@@ -19,7 +20,8 @@ import { PuzzleGameComponent } from "./puzzle-game.component";
         PuzzleGameComponent,
         ImagePreviewComponent,
         PuzzleSettingsComponent,
-        PuzzleResultComponent
+        PuzzleResultComponent,
+        PuzzleGameResultSnackBarComponent
     ],
   imports: [
     CommonModule,

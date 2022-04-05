@@ -6,6 +6,7 @@
     <app-image-preview *ngIf="isGameOn" [imageUrl]="imageUrl"></app-image-preview>
     <app-puzzle-settings (gameSettingsChange)="settingsChanged($event)"></app-puzzle-settings>
     <app-puzzle-results></app-puzzle-results>
+    <app-puzzle-game-result-snack-bar></app-puzzle-game-result-snack-bar>
 </div>
 
 <img class="image-original" [src]="imageUrl" alt="puzzle-image" #imageToRaster>

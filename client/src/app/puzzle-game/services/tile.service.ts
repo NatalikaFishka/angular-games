@@ -457,6 +457,8 @@ export class TileService {
         
         let result = allTiles.every(tile => tile.data.index === (tile.data.cellPosition.x * tile.data.cellPosition.y));
 
+        console.log("RESULT", result)
+
         return result;
     }
     

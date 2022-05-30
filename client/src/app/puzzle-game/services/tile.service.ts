@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
 import * as paperCore from "paper/dist/paper-core";
 import { Color, Group, Path, Point, Raster, Rectangle, Size } from "paper/dist/paper-core";
+import { AppStore } from "src/app/app-store.model";
+import { gameFinishedWithSuccess } from "../store/actions/puzzle-game.actions";
 import { Shape } from "./tile-shape.model";
 
 @Injectable({
@@ -14,6 +17,10 @@ export class TileService {
     private idealTileWidth: number = 100;
     private tileWidth: number = this.idealTileWidth;
     private gameRatio: number = 1;
+
+    constructor(
+        private store: Store<AppStore>
+    ) {}
 
     private getMask(tileRatio: number, topTab: number, rightTab: number, bottomTab: number, leftTab: number): paper.Path {
 
@@ -456,8 +463,10 @@ export class TileService {
         }
         
         let result = allTiles.every(tile => tile.data.index === (tile.data.cellPosition.x * tile.data.cellPosition.y));
+        allTiles.forEach(tile => tile.locked = true);
 
-        console.log("RESULT", result)
+        console.log("RESULT", result);
+        this.store.dispatch(gameFinishedWithSuccess());
 
         return result;
     }

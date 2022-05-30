@@ -1,9 +1,12 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppStore } from 'src/app/app-store.model';
 import { PuzzleConfig } from '../../configs/puzzle-image.config';
 import { COMPLEXITY, ComplexityReadable } from '../../models/game-complexity.enum';
 import { PuzzleConfigModel } from '../../models/puzzle-config.mode';
 import { PuzzleGameSettings } from '../../models/puzzle-game-settings.config';
+import { gameIsOff, gameIsOn } from '../../store/actions/puzzle-game.actions';
 
 @Component({
   selector: 'app-puzzle-settings',
@@ -22,6 +25,7 @@ export class PuzzleSettingsComponent implements OnInit{
 
   constructor(
     private fb: FormBuilder,
+    private store: Store<AppStore>
   ) { 
     this.form = this.fb.group({
       puzzleImage: [this.puzzleImages[0].name],
@@ -32,7 +36,6 @@ export class PuzzleSettingsComponent implements OnInit{
 
   public ngOnInit(): void {
     this.setSettings();    
-    console.log(this.puzzleComplexity)
   }
   
   public onChange(event: any) {
@@ -45,16 +48,17 @@ export class PuzzleSettingsComponent implements OnInit{
   
   public startGame() {
     this.isGameStarted = true;
-    this.setSettings();      
+    this.setSettings();
+    this.store.dispatch(gameIsOn());      
   }
   
   public stopGame(): void {
     this.isGameStarted = false;
     this.setSettings();      
+    this.store.dispatch(gameIsOff());      
   }
   
   private setSettings(): void {
-
     
     let selectedComplexity: number = Number(Object.keys(ComplexityReadable).find(key => ComplexityReadable[key] === this.form.value.puzzleComplexity));
     

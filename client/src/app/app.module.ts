@@ -16,6 +16,7 @@ import { AuthUserEffects } from './app-shell/store/effects/auth.effects';
 import { FindCountriesGameModule } from './find-countries-game/find-countries-game.module';
 import { FindCountriesGameReducer } from './find-countries-game/store/reducer/find-countries-game.reducer';
 import { PuzzleGameModule } from './puzzle-game/puzzle-game.module';
+import { PuzzleGameReducer } from './puzzle-game/store/reducer/puzzle-game.reducer';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PuzzleGameModule } from './puzzle-game/puzzle-game.module';
     StoreModule.forRoot({
       memoryGameResults: GameResultReducer,
       authUser: AuthUserReducer,
-      findCountriesGame: FindCountriesGameReducer
+      findCountriesGame: FindCountriesGameReducer,
+      puzzleGame: PuzzleGameReducer
     }),
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([GameResultEffects, AuthUserEffects])

@@ -1,37 +1,64 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnChanges, OnInit, Output, SimpleChange, SimpleChanges} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import { PuzzleConfig } from "./configs/puzzle-image.config";
+import { PuzzleGameSettings } from "./models/puzzle-game-settings.config";
+import { TileService } from "./services/tile.service";
 
 @Component({
     selector: "app-puzzle-game",
     templateUrl: "./puzzle-game.component.html",
     styleUrls: ["./puzzle-game.component.scss"]
 })
-export class PuzzleGameComponent implements AfterViewInit {
+export class PuzzleGameComponent implements AfterViewInit, OnInit {
+    
+    @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
+    @ViewChild("imageToRaster", { static: true }) public imageToRaster!: ElementRef<HTMLImageElement>;
 
-    public rasterImage!: ElementRef<HTMLImageElement>;
-    public imageUrl!: string;
-    public finalImageElementRef: boolean = false;
+    public imageUrl: string | undefined;
+    public isGameOn: boolean = false;
 
     constructor(
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private tileService: TileService
     ) {}
-
+    
     ngAfterViewInit(): void {  
         this.changeDetectorRef.detectChanges();
     }    
 
-    public onImageUrlChange(event: string): void {
-        this.imageUrl = event;
-        this.resetImageReference();
-    }
-    
-    public onImageElementChange(event: ElementRef<HTMLImageElement>): void {
-        this.rasterImage = event;
-    }
-    
-    private resetImageReference(): void {
-        this.finalImageElementRef = false;
-        setTimeout(() => {this.finalImageElementRef = true}, 500)
+    ngOnInit(): void {
         
+        this.imageToRaster.nativeElement.onload = () => {
+
+            if(!this.isGameOn) {
+                this.drawImage();
+            }
+        }
+    }
+
+    private startGame(complexity: number): void {
+        this.tileService.createGame(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement, complexity); 
+    }
+
+
+    private drawImage(): void {   
+        
+        this.tileService.drawImage(this.canvasElement.nativeElement,  this.imageToRaster.nativeElement)
+
+    }
+
+    public settingsChanged(event: PuzzleGameSettings): void {
+
+        let currentImageUrl = PuzzleConfig.find(item => item.name === event.puzzleImage)?.url;
+        this.isGameOn = event.isGameStarted;
+        
+        if (event.isGameStarted) {
+            this.startGame(event.puzzleComplexity);
+        } else if(currentImageUrl !== this.imageUrl) {
+            this.imageUrl = currentImageUrl;
+        } else {
+            this.drawImage();
+        }
+
     }
     
 }

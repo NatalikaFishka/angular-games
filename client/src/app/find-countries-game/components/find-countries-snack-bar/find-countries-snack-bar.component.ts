@@ -21,7 +21,7 @@ export class FindCountriesSnackBarComponent implements OnInit, OnDestroy {
 
 
     private barConfig: MatSnackBarConfig = {
-        panelClass: "find-countries-snack-bar"
+        panelClass: "snack-bar"
     }
 
     constructor(

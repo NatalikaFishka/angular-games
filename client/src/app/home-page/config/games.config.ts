@@ -12,7 +12,14 @@ const CountriesGame: Game = {
     path: 'find-countries-game'
 }
 
+const PuzzleGame: Game = {
+    name: "Puzzles", 
+    image: 'https://res.cloudinary.com/dkqohzqus/image/upload/v1653899111/AngularGames/puzzle-game-home_uichff.jpg',
+    path: 'puzzle-game'
+}
+
 export const GamesConfig: Game[] = [
     CardMemoryGame,
-    CountriesGame
+    CountriesGame,
+    PuzzleGame
 ]

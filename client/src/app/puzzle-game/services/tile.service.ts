@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
 import * as paperCore from "paper/dist/paper-core";
 import { Color, Group, Path, Point, Raster, Rectangle, Size } from "paper/dist/paper-core";
+import { AppStore } from "src/app/app-store.model";
+import { gameFinishedWithSuccess } from "../store/actions/puzzle-game.actions";
 import { Shape } from "./tile-shape.model";
 
 @Injectable({
@@ -14,6 +17,10 @@ export class TileService {
     private idealTileWidth: number = 100;
     private tileWidth: number = this.idealTileWidth;
     private gameRatio: number = 1;
+
+    constructor(
+        private store: Store<AppStore>
+    ) {}
 
     private getMask(tileRatio: number, topTab: number, rightTab: number, bottomTab: number, leftTab: number): paper.Path {
 
@@ -44,7 +51,7 @@ export class TileService {
         }
 
         // Right    
-        let topRightEdge = topLeftEdge.add(new Point(this.idealTileWidth, 0));
+        let topRightEdge = topLeftEdge.add(new Point(this.idealTileWidth * tileRatio, 0));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = topRightEdge.add(new Point(-rightTab * curvyCoords[i * 6 + 1] * tileRatio,
             curvyCoords[i * 6 + 0] * tileRatio));
@@ -57,7 +64,7 @@ export class TileService {
             
         }
         //Bottom
-        let bottomRightEdge = topRightEdge.add(new Point(0, this.idealTileWidth));
+        let bottomRightEdge = topRightEdge.add(new Point(0, this.idealTileWidth * tileRatio));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = bottomRightEdge.subtract(new Point(curvyCoords[i * 6 + 0] * tileRatio,
             bottomTab * curvyCoords[i * 6 + 1] * tileRatio));
@@ -69,7 +76,7 @@ export class TileService {
             mask.cubicCurveTo(p1, p2, p3);
         }
         //Left
-        let bottomLeftEdge = bottomRightEdge.subtract(new Point(this.idealTileWidth, 0));
+        let bottomLeftEdge = bottomRightEdge.subtract(new Point(this.idealTileWidth * tileRatio, 0));
         for (let i = 0; i < curvyCoords.length / 6; i++) {
             let p1 = bottomLeftEdge.subtract(new Point(-leftTab * curvyCoords[i * 6 + 1] * tileRatio,
             curvyCoords[i * 6 + 0] * tileRatio));
@@ -108,10 +115,13 @@ export class TileService {
                 border.strokeColor = new Color(0,0,0);;
                 border.strokeWidth = 5;
 
+                let idealSizedTileWidth = this.idealTileWidth * tileRatio;
+
                 
                 let img = this.getTileRaster(
-                    new Size(this.idealTileWidth, this.idealTileWidth), 
-                    new Point(this.idealTileWidth * x, this.idealTileWidth * y)
+                    new Size(idealSizedTileWidth, idealSizedTileWidth), 
+                    new Point(idealSizedTileWidth * x, idealSizedTileWidth * y),
+                    tileRatio
                 );
 
                 let tile = new Group([mask, border, img, border]);
@@ -366,7 +376,7 @@ export class TileService {
         }
     }
 
-    private getTileRaster(size: paper.Size, offset: paper.Point): paper.Raster {
+    private getTileRaster(size: paper.Size, offset: paper.Point, tileRatio: number): paper.Raster {
 
         let raster = new Raster(this.rasterImage);
 
@@ -374,7 +384,8 @@ export class TileService {
 
         raster.visible = false;
 
-        let topLeftEdge = new Point(-20, -20)
+        // +/-20 is a magic number
+        let topLeftEdge = new Point(-20 * tileRatio, -20 * tileRatio)
         let newSize = size.multiply(2)
 
         let clone = raster.getSubRaster(new Rectangle(topLeftEdge.add(offset), newSize));
@@ -382,19 +393,32 @@ export class TileService {
         return clone;
     }
 
-    public createGame(view: HTMLCanvasElement, rasterImage: HTMLImageElement) {
+    
+    public drawImage(view: HTMLCanvasElement, rasterImage: HTMLImageElement): void {        
+
+        paperCore.setup(view)
+
+        let drawImage = new Raster(rasterImage);
+        
+        //find center of 75% canvas' area
+        let positionX = paperCore.project.view.bounds.topRight.x * 0.75 / 2;
+        let positionY = paperCore.project.view.center.y;
+
+        drawImage.position = new Point(positionX, positionY);
+    }
+
+    public createGame(view: HTMLCanvasElement, rasterImage: HTMLImageElement, complexity: number) {
         paperCore.setup(view); 
 
         // 60% of 75% of canvas board css area
         let allowedFilledWidthForCanvas = paperCore.project.view.bounds.topRight.x * 0.6 * 0.75;
         
             
-            this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
-            this.tileWidth = this.idealTileWidth * this.gameRatio;
+        this.gameRatio = allowedFilledWidthForCanvas / rasterImage.naturalWidth;
+        this.tileWidth = this.idealTileWidth * this.gameRatio * complexity;
 
-            rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
-            rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
-            rasterImage.hidden = true;        
+        rasterImage.width = rasterImage.naturalWidth * this.gameRatio;
+        rasterImage.height = rasterImage.naturalHeight * this.gameRatio;
         
         this.rasterImage = rasterImage;
 
@@ -420,7 +444,7 @@ export class TileService {
 
         this.innerBoard.position = positionOfInnerBoard;
 
-        this.createTiles(tilesInRaw, tiledInColumn, 1);
+        this.createTiles(tilesInRaw, tiledInColumn, complexity);
     }
 
     private randomIntFromInterval(min: number, max: number): number { 
@@ -439,11 +463,12 @@ export class TileService {
         }
         
         let result = allTiles.every(tile => tile.data.index === (tile.data.cellPosition.x * tile.data.cellPosition.y));
+        allTiles.forEach(tile => tile.locked = true);
+
+        console.log("RESULT", result);
+        this.store.dispatch(gameFinishedWithSuccess());
 
         return result;
     }
-
-    public removeGame(): void {
-        paperCore.project.remove();
-    }
+    
 }

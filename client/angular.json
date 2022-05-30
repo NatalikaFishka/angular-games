@@ -62,6 +62,14 @@
                   "maximumWarning": "2kb",
                   "maximumError": "4kb"
                 }
+              ],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "src/assets/",
+                  "ignore": ["**/*.jpg", "**/*.png"],
+                  "output": "/assets/"
+                }
               ]
             }
           }

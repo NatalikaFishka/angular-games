@@ -29,7 +29,7 @@ export class PuzzleGameResultSnackBarComponent implements OnInit {
 
         this.isGameFinishedWithSuccess$.subscribe((result) => {
             if(result) {
-                this.snackBar.open("Game finished! Congratulations!", undefined, this.barConfig);
+                this.snackBar.open("Game finished! Congratulations!!!", undefined, this.barConfig);
             } else {
                 this.snackBar.dismiss();
             }

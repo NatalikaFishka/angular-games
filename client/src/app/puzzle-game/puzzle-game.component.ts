@@ -1,14 +1,17 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import { Store } from "@ngrx/store";
+import { AppStore } from "../app-store.model";
 import { PuzzleConfig } from "./configs/puzzle-image.config";
 import { PuzzleGameSettings } from "./models/puzzle-game-settings.config";
 import { TileService } from "./services/tile.service";
+import { gameIsOff } from "./store/actions/puzzle-game.actions";
 
 @Component({
     selector: "app-puzzle-game",
     templateUrl: "./puzzle-game.component.html",
     styleUrls: ["./puzzle-game.component.scss"]
 })
-export class PuzzleGameComponent implements AfterViewInit, OnInit {
+export class PuzzleGameComponent implements AfterViewInit, OnInit, OnDestroy {
     
     @ViewChild("canvasElement", { static: true }) public canvasElement!: ElementRef<HTMLCanvasElement>;
     @ViewChild("imageToRaster", { static: true }) public imageToRaster!: ElementRef<HTMLImageElement>;
@@ -18,7 +21,8 @@ export class PuzzleGameComponent implements AfterViewInit, OnInit {
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private tileService: TileService
+        private tileService: TileService,
+        private store: Store<AppStore>
     ) {}
     
     ngAfterViewInit(): void {  
@@ -59,6 +63,10 @@ export class PuzzleGameComponent implements AfterViewInit, OnInit {
             this.drawImage();
         }
 
+    }
+
+    ngOnDestroy(): void {
+        this.store.dispatch(gameIsOff())
     }
     
 }
